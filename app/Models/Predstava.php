@@ -20,4 +20,8 @@ class Predstava extends Model
         'trajanje_min' => 'integer'
     ];
 
+    public function izvodjenja(){
+        return $this->hasMany(Izvodjenje::class);
+    }
+    
 }

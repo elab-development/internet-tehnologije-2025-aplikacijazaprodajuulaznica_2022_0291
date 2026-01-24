@@ -17,4 +17,7 @@ class Sala extends Model
         'kapacitet' => 'integer'
     ];
 
+    public function izvodjenja(){
+        return $this->hasMany(Izvodjenje::class);
+    }
 }
