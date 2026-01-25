@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rezervacija extends Model
 {
+    protected $table = 'rezervacije';
+
     protected $fillable = [
-        'korisnik_id',
+        'user_id',
         'ukupna_cena',
         'nacin_placanja',
         'status',
@@ -15,10 +17,11 @@ class Rezervacija extends Model
     ];
 
     protected $casts = [
-        'datum_kreiranja' => 'date'
+        'datum_kreiranja' => 'date',
+        'ukupna_cena' => 'decimal:2'
     ];
 
-    public function korisnik(){
+    public function user(){
         return $this->belongsTo(User::class);
     }
 

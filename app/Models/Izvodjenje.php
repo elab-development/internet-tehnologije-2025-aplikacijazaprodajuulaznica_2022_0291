@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Izvodjenje extends Model
 {
+
     protected $table = 'izvodjenja';
 
     protected $fillable = [
@@ -18,7 +19,8 @@ class Izvodjenje extends Model
 
     protected $casts = [
         'datum_izvodjenja' => 'date',
-        'vreme_pocetka' => 'time'
+        'vreme_pocetka' => 'time',
+        'osnovna_cena' => 'decimal:2'
     ];
 
     public function karte(){

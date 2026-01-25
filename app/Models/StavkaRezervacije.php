@@ -13,6 +13,10 @@ class StavkaRezervacije extends Model
         'kolicina'
     ];
 
+    protected $casts = [
+        'cena_stavke' => 'decimal:2'
+    ];
+
     public function rezervacija(){
         return $this->belongsTo(Rezervacija::class);
     }

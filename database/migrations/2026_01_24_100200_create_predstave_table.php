@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rezervacijas', function (Blueprint $table) {
+        Schema::create('predstave', function (Blueprint $table) {
             $table->id();
+            $table->string('naziv');
+            $table->string('opis');
+            $table->string('img_url');
+            $table->string('reditelj');
+            $table->integer('trajanje_min');
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rezervacijas');
+        Schema::dropIfExists('predstave');
     }
 };

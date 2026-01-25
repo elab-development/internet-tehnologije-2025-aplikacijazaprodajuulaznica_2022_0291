@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Karta extends Model
 {
+
+    protected $table = 'karte';
+
     protected $fillable = [
         'izvodjenje_id',
         'sedista',

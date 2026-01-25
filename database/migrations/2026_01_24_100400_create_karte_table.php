@@ -11,8 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kartas', function (Blueprint $table) {
+        Schema::create('karte', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('izvodjenje_id')
+                ->constrained('izvodjenja')
+                ->cascadeOnDelete();
+            $table->string('sedista');
+            $table->decimal('cena',8,2);
+            $table->boolean('prodata');
             $table->timestamps();
         });
     }
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kartas');
+        Schema::dropIfExists('karte');
     }
 };
