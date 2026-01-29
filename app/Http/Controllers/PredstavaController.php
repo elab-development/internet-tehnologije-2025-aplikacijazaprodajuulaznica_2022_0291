@@ -99,4 +99,30 @@ class PredstavaController extends Controller
         $predstava->delete();
         return response()->json(['message'=>'Predstava je obrisana.'],200);
     }
+
+
+    public function pretraga(Request $request)
+    {
+        $naziv = $request->query('naziv');
+
+        if (!$naziv) {
+            return response()->json(['poruka' => 'Niste uneli parametar za pretragu'], 400);
+        }
+
+        // Koristimo % pre i posle da pronađe bilo koji deo reči
+        $predstave = \App\Models\Predstava::where('naziv', 'LIKE', '%' . $naziv . '%')->get();
+
+        return response()->json($predstave);
+    }
+
+    public function izvodjenja($id)
+    {
+        $predstava = \App\Models\Predstava::find($id);
+        if (!$predstava) {
+            return response()->json(['poruka' => 'Predstava nije pronađena'], 404);
+        }
+        
+        // Vraća sva izvođenja koja pripadaju toj predstavi
+        return response()->json($predstava->izvodjenja);
+    }
 }

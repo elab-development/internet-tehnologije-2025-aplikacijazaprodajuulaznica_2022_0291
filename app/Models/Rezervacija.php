@@ -9,7 +9,7 @@ class Rezervacija extends Model
     protected $table = 'rezervacije';
 
     protected $fillable = [
-        'user_id',
+        'korisnik_id',
         'ukupna_cena',
         'nacin_placanja',
         'status',
@@ -21,8 +21,9 @@ class Rezervacija extends Model
         'ukupna_cena' => 'decimal:2'
     ];
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function korisnik()
+    {
+        return $this->belongsTo(Korisnik::class, 'korisnik_id');
     }
 
     public function stavke(){

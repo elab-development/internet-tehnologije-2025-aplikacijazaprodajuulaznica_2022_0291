@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Izvodjenje;
 use App\Models\Predstava;
 use App\Models\Sala;
+use App\Models\Karta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB; // Za transakcije
 
 class IzvodjenjeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $izvodjenja = Izvodjenje::with(['predstava', 'sala'])->get();
@@ -20,102 +19,112 @@ class IzvodjenjeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Kreira novo izvođenje i AUTOMATSKI generiše karte na osnovu kapaciteta sale.
      */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'predstava_id' => 'required|exists:predstave,id',
-            'sala_id' => 'required|exists:sale,id',
+            'predstava_id'     => 'required|exists:predstave,id',
+            'sala_id'          => 'required|exists:sale,id',
             'datum_izvodjenja' => 'required|date',
-            'vreme_pocetka' => 'required',
-            'osnovna_cena' => 'required|numeric|min:0'
+            'vreme_pocetka'    => 'required',
+            'osnovna_cena'     => 'required|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validacija nije prošla.',
-                'errors' => $validator->errors(),
+                'errors'  => $validator->errors(),
             ], 422);
         }
 
-        $data = $validator->validated();
-        $izvodjenje = Izvodjenje::create($data);
+        // DB::transaction osigurava da ako generisanje karata pukne, 
+        // ne ostane "prazno" izvođenje u bazi bez karata.
+        return DB::transaction(function () use ($request) {
+            
+            // 1. Kreiranje izvođenja
+            $izvodjenje = Izvodjenje::create($request->all());
 
-        return response()->json($izvodjenje, 201);
+            // 2. Dobavljanje kapaciteta sale
+            $sala = Sala::findOrFail($request->sala_id);
+
+            // 3. Petlja za automatsko kreiranje karata
+            for ($i = 1; $i <= $sala->kapacitet; $i++) {
+                Karta::create([
+                    'izvodjenje_id' => $izvodjenje->id,
+                    'broj_sedista'  => $i,
+                    'cena'          => $request->osnovna_cena,
+                    'prodata' => false
+                ]);
+            }
+
+            return response()->json([
+                'message' => "Izvođenje uspešno kreirano i {$sala->kapacitet} karata je generisano.",
+                'data'    => $izvodjenje->load(['predstava', 'sala'])
+            ], 201);
+        });
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show($id)
     {
         $izvodjenje = Izvodjenje::with(['predstava', 'sala'])->find($id);
 
         if (!$izvodjenje) {
-            return response()->json([
-                'message' => 'Izvođenje nije pronađeno.'
-            ], 404);
+            return response()->json(['message' => 'Izvođenje nije pronađeno.'], 404);
         }
 
         return response()->json($izvodjenje);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, $id)
     {
         $izvodjenje = Izvodjenje::find($id);
 
         if (!$izvodjenje) {
-            return response()->json([
-                'message' => 'Izvođenje nije pronađeno.'
-            ], 404);
+            return response()->json(['message' => 'Izvođenje nije pronađeno.'], 404);
         }
 
         $validator = Validator::make($request->all(), [
-            'predstava_id' => 'sometimes|exists:predstave,id',
-            'sala_id' => 'sometimes|exists:sale,id',
+            'predstava_id'     => 'sometimes|exists:predstave,id',
+            'sala_id'          => 'sometimes|exists:sale,id',
             'datum_izvodjenja' => 'sometimes|date',
-            'vreme_pocetka' => 'sometimes',
-            'osnovna_cena' => 'sometimes|numeric|min:0'
+            'vreme_pocetka'    => 'sometimes',
+            'osnovna_cena'     => 'sometimes|numeric|min:0'
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validacija nije prošla.',
-                'errors' => $validator->errors(),
-            ], 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $izvodjenje->update($validator->validated());
+        $izvodjenje->update($request->all());
 
-        return response()->json($izvodjenje, 200);
+        return response()->json([
+            'message' => 'Izvođenje uspešno ažurirano.',
+            'data'    => $izvodjenje
+        ], 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Briše izvođenje. Zbog 'cascadeOnDelete' u migraciji, 
+     * automatski će se obrisati i sve karte vezane za ovo izvođenje.
      */
     public function destroy($id)
     {
         $izvodjenje = Izvodjenje::find($id);
 
         if (!$izvodjenje) {
-            return response()->json([
-                'message' => 'Izvođenje nije pronađeno.'
-            ], 404);
+            return response()->json(['message' => 'Izvođenje nije pronađeno.'], 404);
         }
 
         $izvodjenje->delete();
 
-        return response()->json([
-            'message' => 'Izvođenje je obrisano.'
-        ], 200);
+        return response()->json(['message' => 'Izvođenje i pripadajuće karte su obrisani.'], 200);
     }
 
     /**
-     * sva izvođenja za jednu predstavu
+     * Vraća sva izvođenja za određenu predstavu (filtriranje).
      */
     public function izvodjenjaZaPredstavu($predstavaId)
     {
@@ -127,7 +136,7 @@ class IzvodjenjeController extends Controller
     }
 
     /**
-     * sva izvođenja u jednoj sali
+     * Vraća sva izvođenja u određenoj sali.
      */
     public function izvodjenjaZaSalu($salaId)
     {

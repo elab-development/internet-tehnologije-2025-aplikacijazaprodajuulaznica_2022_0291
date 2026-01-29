@@ -11,31 +11,26 @@ use Illuminate\Http\Request;
 
 class RezervacijaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $rezervacije = Rezervacija::with('stavke.karta')->get();
+        $rezervacije = Rezervacija::with(['stavke.karta'])->get();
         return response()->json($rezervacije);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        // Validacija - mora da odgovara ENUM vrednostima iz baze
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:korisnici,id',
-            'nacin_placanja' => 'required|in:kartica,poklon_vaucer,na_blagajni',
+            'korisnik_id' => 'required|exists:korisnici,id',
+            'nacin_placanja' => 'required|in:kartica,na_blagajni,vaucer',
             'karte' => 'required|array|min:1',
-            'karte.*' => 'required|exists:karte,id'
+            'karte.*' => 'required|exists:karte,id' 
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validacija nije prošla.',
-                'errors' => $validator->errors()
+                'poruka' => 'Validacija nije prošla.',
+                'greske' => $validator->errors()
             ], 422);
         }
 
@@ -44,21 +39,25 @@ class RezervacijaController extends Controller
         try {
             $ukupnaCena = 0;
 
+            // 1. Kreiramo rezervaciju sa statusom 'kreirana'
             $rezervacija = Rezervacija::create([
-                'user_id' => $request->user_id,
-                'ukupna_cena' => 0, // privremeno
+                'korisnik_id' => $request->korisnik_id,
+                'ukupna_cena' => 0, 
                 'nacin_placanja' => $request->nacin_placanja,
-                'status' => 'na_cekanju',
+                'status' => 'kreirana', 
                 'datum_kreiranja' => now()
             ]);
 
+            // 2. Prolazimo kroz niz ID-eva karata
             foreach ($request->karte as $kartaId) {
+                // Koristimo find() da dobijemo JEDAN objekat
                 $karta = Karta::find($kartaId);
 
-                if ($karta->prodata) {
-                    throw new \Exception('Karta je već prodata.');
+                if (!$karta || $karta->prodata) {
+                    throw new \Exception("Karta sa ID-em {$kartaId} je već prodata ili ne postoji.");
                 }
 
+                // 3. Kreiranje stavke
                 StavkaRezervacije::create([
                     'rezervacija_id' => $rezervacija->id,
                     'karta_id' => $karta->id,
@@ -66,58 +65,49 @@ class RezervacijaController extends Controller
                     'kolicina' => 1
                 ]);
 
+                // 4. Update statusa karte
                 $karta->update(['prodata' => true]);
                 $ukupnaCena += $karta->cena;
             }
 
+            // 5. Finalni update rezervacije
             $rezervacija->update([
                 'ukupna_cena' => $ukupnaCena,
-                'status' => 'potvrdjena'
+                // 'status' => 'potvrdjena'
             ]);
 
             DB::commit();
 
-            return response()->json($rezervacija->load('stavke.karta'), 201);
+            return response()->json([
+                'poruka' => 'Rezervacija uspešno kreirana!',
+                'podaci' => $rezervacija->load('stavke.karta')
+            ], 201);
 
         } catch (\Exception $e) {
             DB::rollBack();
-
             return response()->json([
-                'message' => 'Greška prilikom kreiranja rezervacije.',
-                'error' => $e->getMessage()
+                'poruka' => 'Greška prilikom kreiranja rezervacije.',
+                'greska' => $e->getMessage()
             ], 400);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Rezervacija $id)
+    public function show($id)
     {
         $rezervacija = Rezervacija::with('stavke.karta')->find($id);
-
-        if (!$rezervacija) {
-            return response()->json([
-                'message' => 'Rezervacija nije pronađena.'
-            ], 404);
-        }
-
-        return response()->json($rezervacija);
+        return $rezervacija ? response()->json($rezervacija) : response()->json(['poruka' => 'Nema'], 404);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Rezervacija $rezervacija)
+    public function potvrdiRezervaciju($id)
     {
-        //
-    }
+        $rezervacija = Rezervacija::find($id);
+        if (!$rezervacija) return response()->json(['poruka' => 'Nema'], 404);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Rezervacija $rezervacija)
-    {
-        //
+        $rezervacija->update(['status' => 'potvrdjena']);
+
+        return response()->json(['poruka' => 'Admin je uspešno potvrdio rezervaciju!']);
     }
 }
+
+
+

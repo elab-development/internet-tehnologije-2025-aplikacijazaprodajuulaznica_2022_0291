@@ -9,25 +9,25 @@ use Illuminate\Support\Facades\Validator;
 
 class KartaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Vraća sve karte u sistemu (korisno za admina).
+
     public function index()
     {
-        //
+        // Uzimamo karte i odmah učitavamo podatke o izvođenju, predstavi i sali
+        $karte = Karta::with(['izvodjenje.predstava', 'izvodjenje.sala'])->get();
+        return response()->json($karte);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store metoda - samo za vanredno dodavanje pojedinačne karte.
      */
-    //Samo admin moze ovo da radi
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'izvodjenje_id' => 'required|exists:izvodjenja,id',
-            'sedista' => 'required|string|max:50',
-            'cena' => 'required|numeric|min:0',
-            'prodata' => 'boolean'
+            'broj_sedista'  => 'required|integer|min:1', 
+            'cena'          => 'required|numeric|min:0',
+            'prodata'       => 'boolean'
         ]);
 
         if ($validator->fails()) {
@@ -46,49 +46,50 @@ class KartaController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Detalji jedne karte.
      */
     public function show($id)
     {
-        $karta = Karta::with('izvodjenje')->find($id);
+        $karta = Karta::with(['izvodjenje.predstava', 'izvodjenje.sala'])->find($id);
 
         if (!$karta) {
-            return response()->json([
-                'message' => 'Karta nije pronađena.'
-            ], 404);
+            return response()->json(['message' => 'Karta nije pronađena.'], 404);
         }
 
         return response()->json($karta);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Karte za određeno izvođenje - BITNA METODA.
+     * Kada korisnik klikne na predstavu da vidi slobodna mesta.
      */
-    public function update(Request $request, Karta $karta)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Karta $karta)
-    {
-        //
-    }
-
     public function karteZaIzvodjenje($izvodjenjeId)
     {
         $izvodjenje = Izvodjenje::find($izvodjenjeId);
 
         if (!$izvodjenje) {
-            return response()->json([
-                'message' => 'Izvođenje nije pronađeno.'
-            ], 404);
+            return response()->json(['message' => 'Izvođenje nije pronađeno.'], 404);
         }
 
-        $karte = Karta::where('izvodjenje_id', $izvodjenjeId)->get();
+        // Vraćamo sve karte za to izvođenje (i prodate i slobodne da bi mogla da se nacrta sala)
+        $karte = Karta::where('izvodjenje_id', $izvodjenjeId)
+                      ->orderBy('broj_sedista', 'asc')
+                      ->get();
 
         return response()->json($karte);
     }
+
+    /**
+     * Brisanje karte
+     */
+    public function destroy($id)
+    {
+        $karta = Karta::find($id);
+        if (!$karta) {
+            return response()->json(['message' => 'Karta nije pronađena.'], 404);
+        }
+        $karta->delete();
+        return response()->json(['message' => 'Karta je uklonjena iz sistema.'], 200);
+    }
+
 }
