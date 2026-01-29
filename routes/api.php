@@ -13,6 +13,15 @@ use App\Http\Controllers\AuthController;
 Route::post('/registracija', [AuthController::class, 'registracija']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])
+    ->name('verification.verify');
+
+        // 1. Ruta za slanje mejla
+Route::post('/zaboravljena-lozinka', [AuthController::class, 'zaboravljenaLozinka']);
+
+        // 2. Ruta koja menja lozinku kada korisnik klikne na link
+Route::post('/reset-lozinke', [AuthController::class, 'resetujLozinku']);
+
 // Pretraga i Relacije
 Route::get('/predstave/pretraga', [PredstavaController::class, 'pretraga']);
 Route::get('/predstave/{id}/izvodjenja', [IzvodjenjeController::class, 'izvodjenjaZaPredstavu']);
