@@ -63,30 +63,34 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        
         $request->validate([
-            'email' => 'required|email',
+            'korisnicko_ime' => 'required', //
             'lozinka' => 'required',
         ]);
 
-        $korisnik = Korisnik::where('email', $request->email)->first();
+        
+        $korisnik = Korisnik::where('korisnicko_ime', $request->korisnicko_ime)->first(); //
 
-        // Provera lozinke
+        
         if (!$korisnik || !Hash::check($request->lozinka, $korisnik->lozinka)) {
-            return response()->json(['poruka' => 'Pogrešni podaci'], 401);
+            return response()->json(['poruka' => 'Pogrešni podaci'], 401); //
         }
+
 
         if (!$korisnik->hasVerifiedEmail()) {
             return response()->json([
-                'poruka' => 'Vaš nalog nije verifikovan. Molimo proverite mejl i kliknite na link.'
-            ], 403); // 403 Forbidden (Zabranjeno)
+                'poruka' => 'Vaš nalog nije verifikovan.'
+            ], 403); //
         }
 
-        $token = $korisnik->createToken('auth_token')->plainTextToken;
+        $token = $korisnik->createToken('auth_token')->plainTextToken; //
 
         return response()->json([
             'poruka' => 'Dobrodošli, ' . $korisnik->korisnicko_ime,
             'access_token' => $token,
-            'uloga' => $korisnik->uloga
+            'uloga' => $korisnik->uloga,
+            'korisnik' => $korisnik // Dodajemo celog korisnika da React ima ID i ime
         ]);
     }
 
