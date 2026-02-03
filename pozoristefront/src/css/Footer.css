@@ -1,0 +1,155 @@
+/* FUTTER (FOOTER) SEKCIJA - CSS STILOVI */
+
+.footer-section {
+    background-color: #e0b8b8; 
+    padding-top: 50px;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 2fr; 
+    gap: 40px;
+    padding-bottom: 50px;
+}
+
+.footer-col h4 {
+    font-size: 1.1rem;
+    color: #A52A2A; 
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #A52A2A;
+    margin-bottom: 15px;
+}
+
+.footer-description {
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Stilovi za linkove (Navigacija, Pravila, Kontakt) */
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+.footer-col ul li a {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.3s;
+}
+.footer-col ul li a:hover {
+    color: #A52A2A; 
+}
+
+/* Stilovi za kontakt detalje */
+.footer-col.contact p {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+.footer-col.contact i {
+    color: #A52A2A;
+    font-size: 1.1rem;
+    margin-right: 10px;
+    min-width: 15px;
+    padding-top: 3px;
+}
+
+/* Stilovi za društvene mreže */
+.social-links a {
+    color: white;
+    background-color: #A52A2A;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    margin-right: 10px;
+    font-size: 1.1rem;
+    transition: background-color 0.3s;
+}
+.social-links a:hover {
+    background-color: #8B1A1A;
+}
+
+/* Donji deo futera (Copyright) */
+.footer-bottom {
+    margin-top: 25px; 
+    
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1); 
+
+    padding: 20px 0;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+    background-color: transparent; 
+}
+
+/* RESPONSIVNOST */
+@media (max-width: 992px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 576px) {
+    .footer-grid {
+        grid-template-columns: 1fr; 
+        text-align: center;
+        padding-bottom: 30px;
+    }
+    .footer-col.contact p {
+        justify-content: center;
+    }
+    .footer-col.contact i {
+        padding-top: 0;
+    }
+    .footer-col ul {
+        text-align: center;
+    }
+    .footer-col ul li {
+        display: inline-block;
+        margin: 0 5px 10px 5px;
+    }
+    .footer-col ul li a {
+        font-size: 0.9rem;
+    }
+}
+
+/* STIL ZA DUGME MAPA */
+
+.map-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #A52A2A; 
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-top: 20px; 
+    transition: background-color 0.3s ease;
+}
+
+.map-button:hover {
+    background-color: #8B1A1A; 
+    color: white; 
+}
+
+.map-button i {
+    color: white;
+    font-size: 1.1rem;
+    margin-right: 10px;
+    padding-top: 0; 
+}
