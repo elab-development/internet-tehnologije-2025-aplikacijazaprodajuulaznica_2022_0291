@@ -78,11 +78,13 @@ class AuthController extends Controller
         }
 
 
+        /*
         if (!$korisnik->hasVerifiedEmail()) {
             return response()->json([
                 'poruka' => 'Vaš nalog nije verifikovan.'
             ], 403); //
         }
+        */
 
         $token = $korisnik->createToken('auth_token')->plainTextToken; //
 
@@ -177,7 +179,6 @@ class AuthController extends Controller
         $korisnik = Korisnik::where('email', $request->email)->first();
         $korisnik->update(['lozinka' => Hash::make($request->lozinka)]);
 
-        // Brišemo token jer je iskorišćen
         DB::table('password_reset_tokens')->where(['email' => $request->email])->delete();
 
         return response()->json(['poruka' => 'Lozinka je uspešno promenjena!']);

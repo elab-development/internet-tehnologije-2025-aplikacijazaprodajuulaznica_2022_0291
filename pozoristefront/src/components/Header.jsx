@@ -45,7 +45,7 @@ const Header = ({ cartItemCount = 0 }) => {
     const handleLogout = async () => {
         try {
             const token = localStorage.getItem("token");
-            // Pozivamo Laravel da uništi token u bazi
+            // Pozivamo Laravel da unisti token u bazi
             await axios.post('http://localhost:8000/api/logout', {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -74,7 +74,7 @@ const Header = ({ cartItemCount = 0 }) => {
             }
         }
         
-        // Provera za admin linkove
+        //Provera za admin linkove
         if (path === '/admin/izvodjenja' && (currentPath === '/izvodjenje/add' || currentPath.startsWith('/izvodjenje/edit/'))) {
              return 'nav-item active';
         }
@@ -87,11 +87,14 @@ const Header = ({ cartItemCount = 0 }) => {
     };
 
     const getUserDisplay = () => {
-        if (!me) return "Korisnik";
+        if (!me) return "Gost";
+        
+        // Proveri da li se polje možda zove 'name' umesto 'username'
+        const nameToDisplay = me.korisnicko_ime || "Korisnik";
         
         return isAdmin 
-            ? `${me.username} (ADMIN)` 
-            : me.username;
+            ? `${nameToDisplay} (ADMIN)` 
+            : nameToDisplay;
     };
     
     const handleCartClick = () => {

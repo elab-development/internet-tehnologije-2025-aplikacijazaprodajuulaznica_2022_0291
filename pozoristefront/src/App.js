@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Context
+import { AuthProvider } from './context/AuthContext';
 
 // Komponente
 import Header from './components/Header'; 
@@ -7,55 +10,40 @@ import Footer from './components/Footer';
 
 // Pages
 import { Pocetna } from './pages/Pocetna';
-import LogIn from './pages/LogIn'; 
+import LogIn from './pages/LogIn';
+import Repertoar from './pages/Repertoar';
+import { Predstave } from './pages/Predstave';
+import IzvodjenjeForma from './pages/IzvodjenjeForma';
 
 function App() {
-    const [user, setUser] = useState(() => {
-        const savedUser = localStorage.getItem("me");
-        try {
-            return savedUser ? JSON.parse(savedUser) : null;
-        } catch (e) {
-            return null;
-        }
-    });
-
-    const handleLoginSuccess = (userData) => {
-        setUser(userData);
-        console.log("Korisnik ulogovan u App.js:", userData);
-    };
-
     return (
         <BrowserRouter>
-            <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}> 
-                
-                {/* Header je sada uvek vidljiv i prima user podatke */}
-                <Header cartItemCount={0} /> 
-                
-                <main style={{ flex: 1 }}>
-                    <Routes>
-                        <Route path="/" element={<Pocetna />} />
-                        
-                        <Route 
-                            path="/login" 
-                            element={<LogIn onLoginSuccess={handleLoginSuccess} />} 
-                        />
-                        
-                        
-                        <Route path="/repertoar" element={<h1>dodati repertoar</h1>} />
-                        <Route path="/predstave" element={<h1>dodati predstave</h1>} />
-                        <Route path="/kontakt" element={<h1>Kontakt stranica</h1>} />
-                        
-                        {/* Admin rute */}
-                        <Route path="/izvodjenje/add" element={<h1>Dodaj izvođenje (Admin)</h1>} />
-                        <Route path="/admin/rezervacije" element={<h1>Sve rezervacije (Admin)</h1>} />
+            <AuthProvider>
+                <div
+                    className="App"
+                    style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+                >
+                    <Header cartItemCount={0} />
 
-                        <Route path="/test" element={<h1>Ruter radi!</h1>} />
-                    </Routes>
-                </main>
-                
-                {/* Footer na dnu svake stranice */}
-                <Footer />
-            </div>
+                    <main style={{ flex: 1 }}>
+                        <Routes>
+                            <Route path="/" element={<Pocetna />} />
+                            <Route path="/login" element={<LogIn />} />
+
+                            {/* JAVNE STRANICE */}
+                            <Route path="/repertoar" element={<Repertoar />} /> 
+                            <Route path="/predstave" element={<Predstave />} />
+                            <Route path="/kontakt" element={<h1>Kontakt stranica</h1>} />
+
+                            {/* ADMIN RUTE */}
+                            <Route path="/izvodjenje/add" element={<IzvodjenjeForma />} />
+                            <Route path="/test" element={<h1>Ruter radi!</h1>} />
+                        </Routes>
+                    </main>
+
+                    <Footer />
+                </div>
+            </AuthProvider>
         </BrowserRouter>
     );
 }

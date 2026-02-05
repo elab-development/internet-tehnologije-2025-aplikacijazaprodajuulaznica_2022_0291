@@ -33,22 +33,24 @@ export default function LogIn({ onLoginSuccess }) {
 
         try {
             const loginRes = await http.post("/login", form);
-            const token = loginRes.data.token;
-            const user = loginRes.data.korisnik; 
+
+            const token = loginRes.data.access_token;
+            const user = loginRes.data.korisnik;
 
             localStorage.setItem("token", token);
             localStorage.setItem("me", JSON.stringify(user));
-            
+
             if (typeof onLoginSuccess === "function") {
                 onLoginSuccess(user);
             }
-            
-            navigate('/');
-            
-            window.dispatchEvent(new Event('storage')); 
-            
+
+            navigate("/");
+            window.dispatchEvent(new Event("storage"));
         } catch (err) {
-            const errorMessage = err.response?.data?.message || "Prijava nije uspela. Proverite korisničko ime i lozinku.";
+            const errorMessage =
+                err.response?.data?.poruka ||
+                err.response?.data?.message ||
+                "Prijava nije uspela. Proverite korisničko ime i lozinku.";
             setError(errorMessage);
         } finally {
             setLoading(false);
@@ -65,7 +67,7 @@ export default function LogIn({ onLoginSuccess }) {
                 
                 <form onSubmit={handleSubmit}>
                     
-                    {/* Polje: Korisničko ime */}
+                    {/* Polje: Korisnicko ime */}
                     <div className="form-group">
                         <label htmlFor="korisnicko_ime">Korisničko ime</label>
                         <div className="input-with-icon">
@@ -90,7 +92,7 @@ export default function LogIn({ onLoginSuccess }) {
                             {/* {<FaLock className="input-icon" />} */}
                             <input 
                                 id="lozinka"
-                                type="lozinka" 
+                                type="password" //PROMENJENO TESTIRALA SAM NESTO da mi proradi kod 
                                 name="lozinka" 
                                 value={form.lozinka} 
                                 onChange={handleChange} 
@@ -101,7 +103,7 @@ export default function LogIn({ onLoginSuccess }) {
                         </div>
                     </div>
                     
-                    {/* Prikaz greške */}
+                    {/* Prikaz greske */}
                     {error && <p className="error-message">{error}</p>}
                     
                     {/* Dugme za prijavu */}

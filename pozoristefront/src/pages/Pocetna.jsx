@@ -3,10 +3,10 @@ import '../css/Pocetna.css';
 import { useNavigate } from 'react-router-dom';
 
 export const Pocetna = () => {
-    const navigate = useNavigate(); // <-- Inicijalizacija useNavigate hook-a
+    const navigate = useNavigate();
 
     const handleKupiUlazniceClick = () => {
-        navigate('/repertoar'); // <-- Navigacija na novu rutu
+        navigate('/repertoar');
     };
 
     return (
@@ -115,7 +115,7 @@ export const Pocetna = () => {
                     </div>
 
                     <div className="center-link">
-                         {/* Dugme "Pogledajte repertoar" takođe vodi na /repertoar */}
+                         {/* Dugme "Pogledajte repertoar" takodje vodi na /repertoar */}
                          <button className="btn btn-primary" onClick={handleKupiUlazniceClick}> 
                             Pogledajte aktuelni repertoar <i className="bi bi-arrow-right"></i>
                         </button>

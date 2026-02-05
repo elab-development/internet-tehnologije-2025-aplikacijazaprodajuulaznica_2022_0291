@@ -4,13 +4,13 @@ import '../css/Footer.css';
 const Footer = () => {
   const currentYear = new Date().getFullYear(); 
   
-  // URL ZA GOOGLE MAPS"
+  //URL ZA GOOGLE MAPS"
   const mapUrl = 'https://www.google.com/maps/search/?api=1&query=Bulevar+Umetnosti+10,+Beograd';
 
   return (
     <footer className="footer-section">
       <div className="container footer-grid">
-        
+
         {/* KOLONA 1: Logo, Opis, Društvene mreže... */}
         <div className="footer-col about">
           <h3 className="footer-logo">Teatar Maska</h3>
@@ -18,14 +18,14 @@ const Footer = () => {
             Pronađite nas na društvenim mrežama!
           </p>
           <div className="social-links">
-            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-              <i className="bi bi-facebook"></i>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer">
+              <img src="/slike/facebook-logo.png" alt="FB" className="social-icon-img" />
             </a>
-            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <i className="bi bi-instagram"></i>
+            <a href="https://instagram.com" target="_blank" rel="noreferrer">
+              <img src="/slike/instagram-logo.png" alt="IG" className="social-icon-img" />
             </a>
-            <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-              <i className="bi bi-youtube"></i>
+            <a href="https://youtube.com" target="_blank" rel="noreferrer">
+              <img src="/slike/youtube-logo2.png" alt="YT" className="social-icon-img" />
             </a>
           </div>
           
