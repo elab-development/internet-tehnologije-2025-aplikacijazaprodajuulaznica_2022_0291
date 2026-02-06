@@ -11,9 +11,15 @@ import Footer from './components/Footer';
 // Pages
 import { Pocetna } from './pages/Pocetna';
 import LogIn from './pages/LogIn';
+import Registracija from './pages/Registracija';
 import Repertoar from './pages/Repertoar';
 import { Predstave } from './pages/Predstave';
 import IzvodjenjeForma from './pages/IzvodjenjeForma';
+
+import { Kontakt } from './pages/Kontakt';
+
+// Unutar <Routes> dodaj:
+
 
 function App() {
     return (
@@ -33,7 +39,8 @@ function App() {
                             {/* JAVNE STRANICE */}
                             <Route path="/repertoar" element={<Repertoar />} /> 
                             <Route path="/predstave" element={<Predstave />} />
-                            <Route path="/kontakt" element={<h1>Kontakt stranica</h1>} />
+                            <Route path="/kontakt" element={<Kontakt />} /> 
+                            <Route path="/registracija" element={<Registracija />} />
 
                             {/* ADMIN RUTE */}
                             <Route path="/izvodjenje/add" element={<IzvodjenjeForma />} />

@@ -78,13 +78,13 @@ class AuthController extends Controller
         }
 
 
-        /*
+        
         if (!$korisnik->hasVerifiedEmail()) {
             return response()->json([
                 'poruka' => 'Vaš nalog nije verifikovan.'
             ], 403); //
         }
-        */
+        
 
         $token = $korisnik->createToken('auth_token')->plainTextToken; //
 

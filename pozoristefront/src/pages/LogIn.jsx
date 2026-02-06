@@ -113,7 +113,7 @@ export default function LogIn({ onLoginSuccess }) {
                     
                     {/* Link za registraciju */}
                     <p className="register-link-text">
-                        Nemate nalog? <a href="/register">Registrujte se ovde.</a>
+                        Nemate nalog? <a href="/registracija">Registrujte se ovde.</a>
                     </p>
 
                 </form>

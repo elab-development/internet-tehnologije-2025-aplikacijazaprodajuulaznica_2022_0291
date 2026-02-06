@@ -44,7 +44,6 @@
 }
 
 
-/* --- GRID ZA IZVOĐENJA --- */
 .repertoar-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
@@ -53,7 +52,6 @@
     align-items: stretch; 
 }
 
-/* --- KARTICA IZVOĐENJA --- */
 .izvodjenje-card {
     background-color: #ffffff;
     border: 1px solid #eee;
@@ -74,7 +72,6 @@
     width: 100%;
     height: 220px; 
     object-fit: cover; 
-    object-position: top;
     border-bottom: 1px solid #f0f0f0;
 }
 
@@ -177,7 +174,6 @@
     box-shadow: 0 4px 10px rgba(165, 42, 42, 0.2); 
 }
 
-/* Admin akcije u kartici (Izmeni/Obriši) */
 .admin-card-actions {
     display: flex;
     gap: 10px;
@@ -185,12 +181,11 @@
 }
 
 .admin-card-actions .admin-card-btn {
-    flex: 1; /* Podela prostora 50/50 */
+    flex: 1;
     padding: 12px 15px;
     font-size: 0.95rem;
 }
 
-/* --- STILOVI ZA NEMA IZVOĐENJA (ostaju isti) --- */
 .no-izvodjenja {
     margin-top: 60px;
     padding: 40px;
@@ -215,7 +210,6 @@
     margin-top: 20px;
 }
 
-/* --- STILOVI ZA MODALNI PROZOR --- */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -271,7 +265,6 @@
     font-size: 1rem;
 }
 
-/* Upozorenje za brisanje */
 .modal-content .warning-text {
     font-weight: 600;
     color: #d9534f;
@@ -291,7 +284,6 @@
 }
 
 
-/* --- RESPONSIVNOST --- */
 @media (max-width: 768px) {
     .repertoar-section .section-title {
         font-size: 2.8rem;

@@ -162,7 +162,7 @@ const Header = ({ cartItemCount = 0 }) => {
                     {!isAuthenticated ? (
                         <>
                             <Link to="/login" className="btn-login">Prijava</Link>
-                            <Link to="/register" className="btn-register">Registracija</Link>
+                            <Link to="/registracija" className="btn-register">Registracija</Link>
                         </>
                     ) : (
                         <>

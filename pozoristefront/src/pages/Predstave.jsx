@@ -239,13 +239,17 @@ export const Predstave = () => {
   };
 
   // Filter
+
   const filteredPredstave = predstave.filter((predstava) => {
     if (!searchTerm) return true;
 
     const q = searchTerm.toLowerCase();
     const matchNaziv = String(predstava.naziv || "").toLowerCase().includes(q);
     const matchOpis = String(predstava.opis || "").toLowerCase().includes(q);
-    return matchNaziv || matchOpis;
+    // DODATO: Provera za reditelja
+    const matchReditelj = String(predstava.reditelj || "").toLowerCase().includes(q);
+
+    return matchNaziv || matchOpis || matchReditelj;
   });
 
   // Sort
@@ -299,7 +303,7 @@ export const Predstave = () => {
             <input
               type="text"
               className="input"
-              placeholder="Pretraga po nazivu ili opisu..."
+              placeholder="Pretraga po nazivu, opisu ili reditelju..."
               value={inputTerm}
               onChange={(e) => setInputTerm(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
