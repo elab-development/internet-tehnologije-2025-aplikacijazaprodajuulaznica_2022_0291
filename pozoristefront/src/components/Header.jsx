@@ -75,8 +75,8 @@ const Header = ({ cartItemCount = 0 }) => {
         }
         
         //Provera za admin linkove
-        if (path === '/admin/izvodjenja' && (currentPath === '/izvodjenje/add' || currentPath.startsWith('/izvodjenje/edit/'))) {
-             return 'nav-item active';
+        if (path === '/admin/izvodjenja' && (currentPath === '/admin/izvodjenja/dodavanje' || currentPath.startsWith('/admin/izvodjenja/izmena/'))) {
+            return 'nav-item active';
         }
         
         if (currentPath.startsWith(path)) { 
@@ -131,7 +131,7 @@ const Header = ({ cartItemCount = 0 }) => {
                         {isAuthenticated && isAdmin && (
                             <>
                                 <li className={getClassName('/admin/izvodjenja')}>
-                                    <Link to="/izvodjenje/add">Izvođenja</Link>
+                                    <Link to="/admin/izvodjenja/dodavanje">Izvođenja</Link>
                                 </li>
                                 <li className={getClassName('/admin/rezervacije')}>
                                     <Link to="/admin/rezervacije">Rezervacije</Link>

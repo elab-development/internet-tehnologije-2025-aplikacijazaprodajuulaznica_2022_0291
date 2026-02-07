@@ -497,3 +497,5 @@ export const Predstave = () => {
     </div>
   );
 };
+
+export default Predstave;

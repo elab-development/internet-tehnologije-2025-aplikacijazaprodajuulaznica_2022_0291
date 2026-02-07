@@ -88,7 +88,7 @@ export default function Repertoar() {
                 
                 {isAdmin && (
                     <div className="admin-quick-nav">
-                        <button className="btn-admin-add" onClick={() => navigate("/izvodjenje/add")}>
+                        <button className="btn-admin-add" onClick={() => navigate("/admin/izvodjenja/dodavanje")}>
                             Novo Izvođenje
                         </button>
                     </div>

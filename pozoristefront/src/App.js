@@ -9,16 +9,14 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 // Pages
-import { Pocetna } from './pages/Pocetna';
+import Pocetna from './pages/Pocetna';
 import LogIn from './pages/LogIn';
 import Registracija from './pages/Registracija';
 import Repertoar from './pages/Repertoar';
-import { Predstave } from './pages/Predstave';
+import Predstave from './pages/Predstave';
 import IzvodjenjeForma from './pages/IzvodjenjeForma';
-import { Kontakt } from './pages/Kontakt';
+import Kontakt from './pages/Kontakt';
 import  AdminRezervacije from './pages/AdminRezervacije';
-
-// OVE DVE LINIJE OBAVEZNO DODAJ (Proveri da li su ti fajlovi u folderu pages)
 import KupiKartu from './pages/KupiKartu'; 
 import Korpa from './pages/Korpa';
 
@@ -40,7 +38,6 @@ function App() {
                     className="App"
                     style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
                 >
-                    {/* Ovde prosledi broj stavki da se vidi na ikonici u Headeru */}
                     <Header cartItemCount={cart.length} />
 
                     <main style={{ flex: 1 }}>
@@ -59,10 +56,9 @@ function App() {
                             <Route path="/korpa" element={<Korpa cart={cart} setCart={setCart} removeFromCart={removeFromCart} />} />
 
                             {/* ADMIN RUTE */}
-                            <Route path="/izvodjenje/add" element={<IzvodjenjeForma />} />
-                            <Route path="/test" element={<h1>Ruter radi!</h1>} />
+                            <Route path="/admin/test" element={<h1>Test radi!</h1>} />
+                            <Route path="/admin/izvodjenja/dodavanje" element={<IzvodjenjeForma />} />
                             <Route path="/admin/izvodjenja/izmena/:id" element={<IzvodjenjeForma />} />
-                            {/* 3. Upravljanje rezervacijama - OVO SMO DODALI */}
                             <Route path="/admin/rezervacije" element={<AdminRezervacije />} />
                         </Routes>
                     </main>

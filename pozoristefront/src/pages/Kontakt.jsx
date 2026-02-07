@@ -49,3 +49,5 @@ export const Kontakt = () => {
         </div>
     );
 };
+
+export default Kontakt;

@@ -48,8 +48,6 @@ const IzvodjenjeForma = () => {
       : { Accept: "application/json" };
   }, [token]);
 
-
-
   const [izvodjenjeData, setIzvodjenjeData] = useState({
     id: isEditing ? Number(id) : null,
     datum_part: "",
