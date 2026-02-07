@@ -24,28 +24,31 @@
 }
 
 /* Glavna Navigacija */
+/* Dodaj ovo u Header.css ako već nemaš za centriranje */
 .main-nav ul {
-    list-style: none;
     display: flex;
+    justify-content: center; /* Centriranje linkova */
+    align-items: center;
+    gap: 30px; /* Razmak između Admin Dashboard i Repertoar */
+    list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.main-nav .nav-item a {
+.nav-item a {
     text-decoration: none;
     color: #333;
-    padding: 10px 15px;
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: color 0.3s;
+}
+
+.nav-item.active a {
+    color: #a03a3a; /* Tvoja bordo boja */
+    border-bottom: 2px solid #a03a3a;
 }
 
 .main-nav .nav-item a:hover {
     color: #A52A2A;
-}
-
-.main-nav .nav-item.active a {
-    color: #A52A2A;
-    border-bottom: 2px solid #A52A2A;
 }
 
 /* AKCIJE (Prijava/Registracija/Odjava/Korpa) STILOVI */

@@ -1,0 +1,87 @@
+/* Glavni kontejner koji drži sve */
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* Centriranje levo-desno */
+    justify-content: center; /* Centriranje gore-dole */
+    min-height: 80vh;       /* Zauzmi skoro ceo ekran da bi centriranje radilo */
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;         /* Centriranje samog kontejnera na stranici */
+    font-family: 'Playfair Display', serif;
+}
+
+/* Header unutar dashboarda */
+.admin-header {
+    text-align: center;     /* Centriraj tekst unutar headera */
+    margin-bottom: 50px;
+    width: 100%;
+}
+
+.admin-header h1 {
+    color: #8b2626;
+    font-size: 3rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+/* Grid sa karticama */
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    width: 100%;            /* Raširi grid preko celog prostora */
+}
+
+/* Kartice */
+.admin-card {
+    background: white;
+    padding: 35px;
+    border-radius: 15px;
+    border-top: 5px solid #a03a3a;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Razmakni naslov, opis i dugme */
+}
+
+.admin-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(160, 58, 58, 0.15);
+}
+
+.admin-card h3 {
+    color: #a03a3a;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+/* Dugmići (Linkovi) */
+.btn-admin {
+    display: block;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background-color: #a03a3a;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease;
+}
+
+.btn-admin:hover {
+    background-color: #7a2b2b;
+}
+
+/* Statusni bar */
+.status-active {
+    color: #27ae60;
+    background: #e8f5e9;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}

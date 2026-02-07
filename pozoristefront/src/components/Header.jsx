@@ -31,10 +31,7 @@ const Header = ({ cartItemCount = 0 }) => {
         };
 
         window.addEventListener('storage', handleStorageChange);
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
+        return () => window.removeEventListener('storage', handleStorageChange);
     }, []); 
     
     useEffect(() => {
@@ -45,7 +42,6 @@ const Header = ({ cartItemCount = 0 }) => {
     const handleLogout = async () => {
         try {
             const token = localStorage.getItem("token");
-            // Pozivamo Laravel da unisti token u bazi
             await axios.post('http://localhost:8000/api/logout', {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -64,37 +60,18 @@ const Header = ({ cartItemCount = 0 }) => {
     const currentPath = location.pathname;
 
     const getClassName = (path) => {
-        if (path === '/') {
-            return currentPath === '/' ? 'nav-item active' : 'nav-item';
-        }
-
+        if (path === '/') return currentPath === '/' ? 'nav-item active' : 'nav-item';
         if (path === '/repertoar') {
-            if (currentPath === '/repertoar' || currentPath.startsWith('/karte/')) {
-                return 'nav-item active';
-            }
+            return (currentPath === '/repertoar' || currentPath.startsWith('/karte/')) ? 'nav-item active' : 'nav-item';
         }
-        
-        //Provera za admin linkove
-        if (path === '/admin/izvodjenja' && (currentPath === '/admin/izvodjenja/dodavanje' || currentPath.startsWith('/admin/izvodjenja/izmena/'))) {
-            return 'nav-item active';
-        }
-        
-        if (currentPath.startsWith(path)) { 
-             return 'nav-item active';
-        }
-
+        if (currentPath.startsWith(path)) return 'nav-item active';
         return 'nav-item';
     };
 
     const getUserDisplay = () => {
         if (!me) return "Gost";
-        
-        // Proveri da li se polje možda zove 'name' umesto 'username'
         const nameToDisplay = me.korisnicko_ime || "Korisnik";
-        
-        return isAdmin 
-            ? `${nameToDisplay} (ADMIN)` 
-            : nameToDisplay;
+        return isAdmin ? `${nameToDisplay} (ADMIN)` : nameToDisplay;
     };
     
     const handleCartClick = () => {
@@ -104,7 +81,6 @@ const Header = ({ cartItemCount = 0 }) => {
             alert("Morate se prijaviti da biste pristupili korpi.");
         }
     };
-    
 
     return (
         <header className="main-header">
@@ -116,48 +92,53 @@ const Header = ({ cartItemCount = 0 }) => {
                 
                 <nav className="main-nav">
                     <ul>
-                        <li className={getClassName('/')}>
-                            <Link to="/">Početna</Link>
-                        </li>
-                        
-                        <li className={getClassName('/repertoar')}>
-                            <Link to="/repertoar">Repertoar</Link>
-                        </li> 
-
-                        <li className={getClassName('/predstave')}>
-                            <Link to="/predstave">Predstave</Link>
-                        </li>
-                        
-                        {isAuthenticated && isAdmin && (
+                        {/* Ako JE admin, vidi samo Dashboard i Repertoar */}
+                        {isAdmin ? (
                             <>
-                                <li className={getClassName('/admin/izvodjenja')}>
-                                    <Link to="/admin/izvodjenja/dodavanje">Izvođenja</Link>
+                                <li className={getClassName('/')}>
+                                    <Link to="/">Početna</Link>
                                 </li>
-                                <li className={getClassName('/admin/rezervacije')}>
-                                    <Link to="/admin/rezervacije">Rezervacije</Link>
+                                <li className={getClassName('/admin')}>
+                                    <Link to="/admin">Admin Dashboard</Link>
+                                </li>
+                                <li className={getClassName('/repertoar')}>
+                                    <Link to="/repertoar">Repertoar</Link>
+                                </li>
+                            </>
+                        ) : (
+                            /* Ako NIJE admin (Gost ili običan korisnik), vidi sve normalno */
+                            <>
+                                <li className={getClassName('/')}>
+                                    <Link to="/">Početna</Link>
+                                </li>
+                                <li className={getClassName('/repertoar')}>
+                                    <Link to="/repertoar">Repertoar</Link>
+                                </li>
+                                <li className={getClassName('/predstave')}>
+                                    <Link to="/predstave">Predstave</Link>
+                                </li>
+                                <li className={getClassName('/kontakt')}>
+                                    <Link to="/kontakt">Kontakt</Link>
                                 </li>
                             </>
                         )}
-                        
-                        <li className={getClassName('/kontakt')}>
-                            <Link to="/kontakt">Kontakt</Link>
-                        </li>
                     </ul>
                 </nav>
 
                 <div className="header-actions">
-                    
-                    <button 
-                        className={`btn-cart ${isAuthenticated ? 'active-cart' : 'disabled-cart'}`} 
-                        title={isAuthenticated ? "Korpa" : "Prijavite se za kupovinu"}
-                        onClick={handleCartClick}
-                    >
-                        <i className="bi bi-cart-fill"></i> 
-                        
-                        {isAuthenticated && cartItemCount > 0 && (
-                            <span className="cart-badge">{cartItemCount}</span>
-                        )}
-                    </button>
+                    {/* Korpa se prikazuje SAMO ako korisnik NIJE admin */}
+                    {!isAdmin && (
+                        <button 
+                            className={`btn-cart ${isAuthenticated ? 'active-cart' : 'disabled-cart'}`} 
+                            title={isAuthenticated ? "Korpa" : "Prijavite se za kupovinu"}
+                            onClick={handleCartClick}
+                        >
+                            <i className="bi bi-cart-fill"></i> 
+                            {isAuthenticated && cartItemCount > 0 && (
+                                <span className="cart-badge">{cartItemCount}</span>
+                            )}
+                        </button>
+                    )}
 
                     {!isAuthenticated ? (
                         <>

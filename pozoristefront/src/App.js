@@ -19,6 +19,7 @@ import Kontakt from './pages/Kontakt';
 import  AdminRezervacije from './pages/AdminRezervacije';
 import KupiKartu from './pages/KupiKartu'; 
 import Korpa from './pages/Korpa';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
     const [cart, setCart] = useState([]);
@@ -56,6 +57,7 @@ function App() {
                             <Route path="/korpa" element={<Korpa cart={cart} setCart={setCart} removeFromCart={removeFromCart} />} />
 
                             {/* ADMIN RUTE */}
+                            <Route path="/admin" element={<AdminDashboard/>} />
                             <Route path="/admin/test" element={<h1>Test radi!</h1>} />
                             <Route path="/admin/izvodjenja/dodavanje" element={<IzvodjenjeForma />} />
                             <Route path="/admin/izvodjenja/izmena/:id" element={<IzvodjenjeForma />} />

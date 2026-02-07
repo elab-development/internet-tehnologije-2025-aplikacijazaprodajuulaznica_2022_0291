@@ -9,7 +9,7 @@
 .theater-page {
     background-color: var(--deep-rose);
     min-height: 100vh;
-    padding: 80px 20px 150px; /* 150px na dnu sprečava bilo kakvo dodirivanje s futerom */
+    padding: 80px 20px 150px; 
     color: var(--text-light);
     font-family: 'Poppins', sans-serif;
 }
@@ -83,12 +83,12 @@
 
 .hall-tag {
     background: rgba(0,0,0,0.7);
-    color: var(--gold);
+    color: white;
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 600;
-    border: 1px solid var(--gold);
+    border: 1px solid white;
 }
 
 .card-info {
@@ -122,7 +122,7 @@
     font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
     margin: 15px 0 10px;
-    height: 3.6rem; /* Limit na dva reda */
+    height: 3.6rem; 
     overflow: hidden;
 }
 
@@ -141,7 +141,7 @@
     font-size: 1.1rem;
 }
 
-/* --- DUGMAD --- */
+/* --- DUGMAD NA KARTICI --- */
 .btn-buy {
     background: var(--deep-rose);
     color: white;
@@ -163,18 +163,101 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    margin-top: auto; /* Gura dugmiće na dno kartice */
 }
 
 .btn-edit, .btn-del {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: 0.3s;
 }
 
-.btn-del { color: #d9534f; border-color: #d9534f; background: none; }
-.btn-del:hover { background: #d9534f; color: white; }
+.btn-edit {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    color: #333;
+}
+.btn-edit:hover { background: #e0e0e0; }
+
+.btn-del { 
+    color: #d9534f; 
+    border: 1px solid #d9534f; 
+    background: none; 
+}
+.btn-del:hover { 
+    background: #d9534f; 
+    color: white; 
+}
+
+/* --- ADMIN QUICK NAV --- */
+.admin-quick-nav {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-admin-add {
+    background: rgba(255, 255, 255, 0.05);
+    color: #f8eeee;
+    border: 2px solid var(--gold);
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 15px rgba(179, 142, 68, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-admin-add:hover {
+    background: var(--gold);
+    color: var(--deep-rose);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(179, 142, 68, 0.6);
+}
+
+.btn-admin-add::before {
+    content: '+';
+    font-size: 1.4rem;
+}
+
+/* --- MODALI (FIX ZA TVOJ PROBLEM) --- */
+.luxury-modal-overlay {
+    position: fixed; /* Ključno: ostaje fiksirano na ekranu */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75); /* Tamnija pozadina */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Iznad svega */
+    backdrop-filter: blur(4px); /* Zamućuje repertoar iza */
+}
+
+.luxury-modal {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    color: #333;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
 
 /* --- LOADER --- */
 .loader-container {
@@ -193,58 +276,3 @@
     animation: spin 1s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-.hall-tag {
-    background: rgba(0,0,0,0.7);
-    color: white;                  /* Bilo je var(--gold) */
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border: 1px solid white;       /* Bilo je var(--gold) */
-}
-
-
-
-.admin-quick-nav {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-}
-
-.btn-admin-add {
-    background: rgba(255, 255, 255, 0.05); /* Prozirna tamna pozadina */
-    color: #f8eeee; /* Tvoja soft-rose boja za tekst */
-    border: 2px solid #b38e44; /* Zlatna ivica */
-    padding: 12px 35px;
-    border-radius: 50px; /* Skroz zaobljeno kao na slici */
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    text-transform: none; /* Da ostane "Novo Izvođenje" a ne sve velika */
-    
-    /* Zlatni sjaj oko dugmeta */
-    box-shadow: 0 0 15px rgba(179, 142, 68, 0.3);
-    
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.btn-admin-add:hover {
-    background: #b38e44; /* Puni se zlatnom bojom na hover */
-    color: #4a1c1c; /* Tekst postaje taman (burgundi) */
-    transform: scale(1.05); /* Blago se poveća */
-    
-    /* Jači sjaj na hover */
-    box-shadow: 0 0 25px rgba(179, 142, 68, 0.6);
-}
-
-/* Stil za onaj mali plus ispred teksta */
-.btn-admin-add::before {
-    content: '+';
-    font-size: 1.4rem;
-    margin-right: 5px;
-}
