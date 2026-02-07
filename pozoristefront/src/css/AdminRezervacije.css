@@ -1,0 +1,83 @@
+.admin-rez-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.stats-bar {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--gold);
+}
+
+.table-wrapper {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.luxury-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #333;
+}
+
+.luxury-table th {
+    background: #f8f9fa;
+    padding: 18px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #eee;
+}
+
+.luxury-table td {
+    padding: 15px 18px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.user-info { display: flex; flex-direction: column; }
+.user-name { font-weight: 600; color: var(--deep-rose); }
+.user-id { font-size: 0.75rem; color: #999; }
+
+.price-cell { font-weight: 700; color: var(--accent); }
+
+.pay-tag {
+    background: #f0f0f0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-badge.cekanje { background: #fff4e5; color: #b38e44; }
+.status-badge.potvrdjeno { background: #e6fcf5; color: #0ca678; }
+.status-badge.odbijeno { background: #fff5f5; color: #fa5252; }
+
+/* Select Styling */
+.status-select-pro {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    outline: none;
+}
+
+.status-select-pro:focus {
+    border-color: var(--gold);
+}

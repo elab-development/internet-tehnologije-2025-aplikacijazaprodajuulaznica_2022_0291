@@ -77,9 +77,9 @@ const IzvodjenjeForma = () => {
         setPredstave(predstaveRes.data || []);
         setSale(saleRes.data || []);
       } catch (err) {
-        console.error("Greška pri učitavanju predstava/sala:", err);
+        console.error("Greška pri učitavanju stranice:", err);
         setError(
-          "Greška pri učitavanju Predstava ili Sala. Proveri da li si ulogovan kao ADMIN (ruta /sale je admin-only)."
+          "Greška pri učitavanju stranice. Proveri da li si ulogovan kao ADMIN (ruta je admin-only)."
         );
       }
     };

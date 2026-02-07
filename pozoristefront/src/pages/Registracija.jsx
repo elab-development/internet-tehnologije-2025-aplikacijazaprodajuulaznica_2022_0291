@@ -37,9 +37,8 @@ export default function Register({ onRegisterSuccess }) {
             
             
         } catch (err) {
-            console.error("Full error object:", err.response?.data); // Ovo će ti u konzoli nacrtati šta tačno stiže
+            console.error("Full error object:", err.response?.data);
             
-            // Proveravamo redom: našu custom 'poruka', pa Laravelovu 'message', pa 'error'
             const serverError = err.response?.data?.poruka || 
                                 err.response?.data?.message || 
                                 err.response?.data?.error;
@@ -48,7 +47,6 @@ export default function Register({ onRegisterSuccess }) {
                 alert("Nalog je kreiran, ali postoji problem sa slanjem mejla. Probajte da se ulogujete.");
                 navigate('/login');
             } else {
-                // Ako ništa od gore navedenog ne postoji, ispiši generičku poruku
                 setError(serverError || "Greška pri registraciji. Proverite bazu ili internet.");
             }
         }

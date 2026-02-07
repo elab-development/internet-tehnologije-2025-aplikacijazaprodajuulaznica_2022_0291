@@ -41,28 +41,36 @@ class IzvodjenjeController extends Controller
         // DB::transaction osigurava da ako generisanje karata pukne, 
         // ne ostane "prazno" izvođenje u bazi bez karata.
         return DB::transaction(function () use ($request) {
-            
-            // 1. Kreiranje izvođenja
-            $izvodjenje = Izvodjenje::create($request->all());
+                $izvodjenje = Izvodjenje::create($request->all());
+                $sala = Sala::findOrFail($request->sala_id);
 
-            // 2. Dobavljanje kapaciteta sale
-            $sala = Sala::findOrFail($request->sala_id);
+                // Definišemo koliko sedišta ide u jedan red (npr. 5 je idealno za tvoje kapacitete)
+                $sedistaPoRedu = 5; 
+                $abeceda = ['A', 'B', 'C', 'D']; 
 
-            // 3. Petlja za automatsko kreiranje karata
-            for ($i = 1; $i <= $sala->kapacitet; $i++) {
-                Karta::create([
-                    'izvodjenje_id' => $izvodjenje->id,
-                    'broj_sedista'  => $i,
-                    'cena'          => $request->osnovna_cena,
-                    'prodata' => false
-                ]);
-            }
+                for ($i = 0; $i < $sala->kapacitet; $i++) {
+                    // floor(0/5) = 0 (Red A), floor(6/5) = 1 (Red B)...
+                    $indeksReda = floor($i / $sedistaPoRedu);
+                    $slovoReda = $abeceda[$indeksReda];
+                    
+                    // (0 % 5) + 1 = 1, (5 % 5) + 1 = 1 (novi red počinje od 1)
+                    $brojURedu = ($i % $sedistaPoRedu) + 1;
+                    
+                    $oznakaSedista = $slovoReda . $brojURedu; // npr. A1, A2, B1...
 
-            return response()->json([
-                'message' => "Izvođenje uspešno kreirano i {$sala->kapacitet} karata je generisano.",
-                'data'    => $izvodjenje->load(['predstava', 'sala'])
-            ], 201);
-        });
+                    Karta::create([
+                        'izvodjenje_id' => $izvodjenje->id,
+                        'broj_sedista'  => $oznakaSedista, 
+                        'cena'          => $request->osnovna_cena,
+                        'prodata'       => false
+                    ]);
+                }
+
+                return response()->json([
+                    'message' => "Uspešno! Generisano je {$sala->kapacitet} karata za salu: {$sala->naziv}.",
+                    'data'    => $izvodjenje->load(['predstava', 'sala'])
+                ], 201);
+            });
     }
 
 

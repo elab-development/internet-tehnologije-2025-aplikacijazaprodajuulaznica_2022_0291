@@ -1,0 +1,294 @@
+/* KORPA STRANICA STILOVI */
+
+.korpa-container {
+    padding: 40px 20px;
+    max-width: 900px; 
+    margin: 0 auto;
+}
+
+/* Osnovni stilovi za sekcije */
+.cart-section, .reservations-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.korpa-container h2 {
+    font-size: 1.8rem;
+    color: #A52A2A; 
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.cart-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    font-weight: 600;
+    color: #333;
+    flex-basis: 30%; 
+}
+
+.item-details {
+    flex-grow: 1;
+    font-size: 1rem;
+    color: #555;
+}
+
+.item-price {
+    font-weight: 700;
+    color: #A52A2A;
+    margin-left: 20px;
+}
+
+/* Dugme za uklanjanje (btn-remove) */
+.btn-remove {
+    background-color: #dc3545; 
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-left: 10px;
+}
+
+.btn-remove:hover {
+    background-color: #c82333;
+}
+
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-top: 2px solid #A52A2A;
+}
+
+.cart-summary p {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.cart-summary span {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #A52A2A;
+}
+
+
+/* Dugme za finalizaciju kupovine */
+.btn-checkout {
+    background-color: #A52A2A; 
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-checkout:hover:not([disabled]) {
+    background-color: #8B1A1A; 
+}
+
+.btn-checkout[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Stilovi za Sekciju Aktivnih Rezervacija */
+.reservation-list {
+    list-style: none;
+    padding: 0;
+}
+
+.reservation-group {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.reservation-header {
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.reservation-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.reservation-item:last-child {
+    border-bottom: none;
+}
+
+.empty-message, .error-message {
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.empty-message {
+    background-color: #f7f7f7;
+    color: #555;
+}
+
+.error-message {
+    background-color: #f8d7da; 
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Responsivnost */
+@media (max-width: 600px) {
+    .cart-item, .reservation-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .item-name, .item-details {
+        flex-basis: auto;
+    }
+    
+    .item-price, .btn-remove {
+        align-self: flex-end;
+    }
+
+    .cart-summary {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn-checkout {
+        width: 100%;
+    }
+}
+
+/* Kontejner za celu sekciju istorije */
+.reservations-section {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.section-title {
+    color: #4a1a1a; /* Tvoja bordo/tamna boja sa sajta */
+    border-bottom: 2px solid #d4af37; /* Zlatna linija */
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    font-family: 'Playfair Display', serif;
+}
+
+/* Stil za svaku pojedinačnu karticu rezervacije */
+.reservation-card {
+    background: #ffffff;
+    border: 1px solid #eee;
+    border-left: 5px solid #d4af37; /* Zlatna ivica sa strane daje luksuzan izgled */
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.reservation-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* Zaglavlje kartice (ID i Datum) */
+.res-card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 10px;
+}
+
+.res-id {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.res-date {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Lista predstava unutar kartice */
+.res-items-detail {
+    margin: 15px 0;
+}
+
+.res-mini-item {
+    padding: 5px 0;
+    color: #555;
+    font-size: 1rem;
+}
+
+/* Donji deo kartice (Status i Cena) */
+.res-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 10px;
+}
+
+/* Boje za statuse */
+.status-text {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-text.kreirana { background: #fff3cd; color: #856404; }
+.status-text.potvrdjena { background: #d4edda; color: #155724; }
+.status-text.otkazana { background: #f8d7da; color: #721c24; }
+.status-text.istekla { background: #e2e3e5; color: #383d41; }
+
+.res-price-total {
+    font-size: 1.1rem;
+    color: #4a1a1a;
+}
+
+/* Zlatna linija za razdvajanje sekcija */
+.divider-gold {
+    height: 2px;
+    background: linear-gradient(to right, transparent, #d4af37, transparent);
+    margin: 40px 0;
+}

@@ -46,12 +46,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/karte', [KartaController::class, 'store']);
     Route::get('/karte/{id}', [KartaController::class, 'show']);
 
+    Route::get('/moje-rezervacije', [RezervacijaController::class, 'mojeRezervacije']);
+
 
     // 3. ADMIN ZONA (Samo uloga 'admin')
 
     Route::middleware('admin')->group(function () {
 
-        Route::put('/rezervacije/{id}/potvrdi', [RezervacijaController::class, 'potvrdiRezervaciju']);
+        // Route::put('/rezervacije/{id}/potvrdi', [RezervacijaController::class, 'potvrdiRezervaciju']);
+        Route::put('/rezervacije/{id}/status', [RezervacijaController::class, 'updateStatus']);
         
         // Upravljanje salama (CRUD)
         Route::get('/sale', [SalaController::class, 'index']);
