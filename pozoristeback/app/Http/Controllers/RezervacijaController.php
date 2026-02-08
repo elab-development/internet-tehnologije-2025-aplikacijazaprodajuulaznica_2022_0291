@@ -134,4 +134,3 @@ class RezervacijaController extends Controller
 }
 
 
-

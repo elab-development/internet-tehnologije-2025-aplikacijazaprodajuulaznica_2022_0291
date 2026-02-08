@@ -1,16 +1,24 @@
 import React from 'react';
-import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-
 import '../css/AdminDashboard.css'; 
 
+const getMe = () => {
+    try {
+        const authResponse = JSON.parse(localStorage.getItem("me") || "null");
+        return authResponse; 
+    } catch (e) {
+        return null;
+    }
+};
+
 export default function AdminDashboard() {
-    const { user } = useAuth();
+    const user = getMe();
 
     return (
         <div className="admin-container">
             <header className="admin-header">
                 <h1>Admin Dashboard</h1>
+                {/* Sada koristimo korisnicko_ime */}
                 <h2>Dobrodošli, {user?.korisnicko_ime ?? 'Administrator'}!</h2>
                 <p>Status sesije: <span className="status-active">Aktivan</span></p>
                 <p>Uloga na sistemu: <strong style={{ textTransform: 'capitalize' }}>{user?.uloga || 'admin'}</strong></p>

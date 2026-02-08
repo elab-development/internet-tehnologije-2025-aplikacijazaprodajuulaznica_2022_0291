@@ -54,3 +54,4 @@ class Korisnik extends Authenticatable implements MustVerifyEmail
         return $this->uloga === 'klijent';
     }
 }
+

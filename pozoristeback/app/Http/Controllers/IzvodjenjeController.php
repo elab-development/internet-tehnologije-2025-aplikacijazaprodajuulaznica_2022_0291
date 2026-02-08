@@ -44,7 +44,7 @@ class IzvodjenjeController extends Controller
                 $izvodjenje = Izvodjenje::create($request->all());
                 $sala = Sala::findOrFail($request->sala_id);
 
-                // Definišemo koliko sedišta ide u jedan red (npr. 5 je idealno za tvoje kapacitete)
+                // Definišemo koliko sedišta ide u jedan red
                 $sedistaPoRedu = 5; 
                 $abeceda = ['A', 'B', 'C', 'D']; 
 
@@ -155,3 +155,5 @@ class IzvodjenjeController extends Controller
         return response()->json($izvodjenja);
     }
 }
+
+
