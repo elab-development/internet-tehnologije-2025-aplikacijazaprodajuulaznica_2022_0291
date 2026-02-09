@@ -184,3 +184,6 @@ class AuthController extends Controller
         return response()->json(['poruka' => 'Lozinka je uspešno promenjena!']);
     }
 }
+
+
+

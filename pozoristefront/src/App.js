@@ -21,7 +21,6 @@ import KupiKartu from './pages/KupiKartu';
 import Korpa from './pages/Korpa';
 import AdminDashboard from './pages/AdminDashboard';
 
-// Rute
 import AdminRoute from './routes/AdminRoute';
 
 function App() {
@@ -86,3 +85,5 @@ function App() {
 }
 
 export default App;
+
+

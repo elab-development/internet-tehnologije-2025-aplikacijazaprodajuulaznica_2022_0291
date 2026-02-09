@@ -30,3 +30,7 @@ class Rezervacija extends Model
         return $this->hasMany(StavkaRezervacije::class);
     }
 }
+
+
+
+
