@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import http from '../api/http';
 import { useNavigate } from 'react-router-dom';
 import '../css/AdminRezervacije.css';
 
-const API_BASE = 'http://localhost:8000/api';
 
 const AdminRezervacije = () => {
     const navigate = useNavigate();
@@ -33,11 +32,7 @@ const AdminRezervacije = () => {
         setError(null);
         try {
             const token = getToken();
-            // BITNO: Backend mora da vrati "with('korisnik')" da ne bi pisalo Nepoznato
-            const res = await axios.get(`${API_BASE}/rezervacije`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            
+            const res = await http.get('/rezervacije');
             const data = Array.isArray(res.data) ? res.data : res.data.data || [];
             setRezervacije(data);
         } catch (err) {
@@ -55,13 +50,11 @@ const AdminRezervacije = () => {
     const handleStatusChange = async (rezervacijaId, newStatus) => {
         const token = getToken();
         try {
-            // Putanja mora odgovarati tvom Laravelu (npr. /rezervacije/{id}/status)
-            await axios.put(`${API_BASE}/rezervacije/${rezervacijaId}/status`, 
+            await http.put(`/rezervacije/${rezervacijaId}/status`, { status: newStatus }, 
                 { status: newStatus },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             
-            // Odmah ažuriramo lokalni state da korisnik vidi promenu bez reloada
             setRezervacije(prev => prev.map(rez => 
                 rez.id === rezervacijaId ? { ...rez, status: newStatus } : rez
             ));

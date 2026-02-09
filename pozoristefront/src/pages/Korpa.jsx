@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import http from '../api/http';
 import { useNavigate } from 'react-router-dom';
 import '../css/Korpa.css'; 
 
@@ -22,11 +22,8 @@ const Korpa = ({ cart, removeFromCart, setCart }) => {
         setLoadingRezervacije(true);
         setErrorRezervacije(null);
         try {
-            // Koristimo novu, namensku rutu za klijenta
-            const res = await axios.get('http://localhost:8000/api/moje-rezervacije', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setRezervacijeIzBaze(res.data);
+            const res = await http.get('/moje-rezervacije');
+            setRezervacijeIzBaze(res.data || []);
         } catch (err) {
             console.error("Greška pri dohvatanju:", err);
             setErrorRezervacije("Trenutno nije moguće učitati istoriju rezervacija.");
@@ -46,7 +43,8 @@ const Korpa = ({ cart, removeFromCart, setCart }) => {
     const handleCheckout = async () => {
         if (!ulogovaniKorisnik) {
             alert("Moraš biti ulogovana!");
-            return navigate('/login');
+            navigate('/login');
+            return;
         }
 
         if (cart.length === 0) return;
@@ -58,12 +56,9 @@ const Korpa = ({ cart, removeFromCart, setCart }) => {
         };
 
         try {
-            await axios.post('http://localhost:8000/api/rezervacije', payload, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await http.post('/rezervacije', payload);
             alert("Uspešna rezervacija! Tvoje karte su spremne.");
             setCart([]); 
-            // Osvežavamo listu ispod da se pojavi nova rezervacija
             fetchMojeRezervacije(); 
         } catch (err) {
             alert("Greška: " + (err.response?.data?.poruka || "Problem sa serverom"));

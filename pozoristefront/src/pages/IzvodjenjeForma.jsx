@@ -1,12 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import http from '../api/http';
 import { useNavigate, useParams } from "react-router-dom";
 import "../css/IzvodjenjeForma.css";
 
-const API_BASE = "http://localhost:8000/api";
-
 const getToken = () =>
-    localStorage.getItem("token") || localStorage.getItem("access_token");
+    localStorage.getItem("token");
 
 // POMOĆNA: iz "2026-02-10T00:00:00.000000Z" izvuče "2026-02-10"
 const extractDatePart = (datumISO) => {
@@ -66,10 +64,9 @@ const IzvodjenjeForma = () => {
   useEffect(() => {
     const fetchDependencies = async () => {
       try {
-        // pred: javno, sale: admin-only kod tebe -> šaljemo token za oba
         const [predstaveRes, saleRes] = await Promise.all([
-          axios.get(`${API_BASE}/predstave`, { headers: authHeaders }),
-          axios.get(`${API_BASE}/sale`, { headers: authHeaders }),
+          http.get(`/predstave`),
+          http.get(`/sale`),
         ]);
 
         setPredstave(predstaveRes.data || []);
@@ -84,7 +81,7 @@ const IzvodjenjeForma = () => {
 
     const fetchIzvodjenje = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/izvodjenja/${id}`, {
+        const res = await http.get(`/izvodjenja/${id}`, {
           headers: authHeaders,
         });
         const data = res.data;
@@ -160,21 +157,20 @@ const IzvodjenjeForma = () => {
       sala_id: Number(sala_id),
     };
 
-    let url = `${API_BASE}/izvodjenja`;
+    let url = `/izvodjenja`;
     let method = "post";
 
     if (isEditing) {
-      url = `${API_BASE}/izvodjenja/${id}`;
+      url = `/izvodjenja/${id}`;
       method = "put";
     }
 
     try {
-      await axios({
-        method,
-        url,
-        data: payload,
-        headers: authHeaders,
-      });
+      if (isEditing) {
+        await http.put(`/izvodjenja/${id}`, payload);
+      } else {
+        await http.post(`/izvodjenja`, payload);
+      }
 
       alert(`Izvođenje je uspešno ${isEditing ? "ažurirano" : "dodato"}!`);
       navigate("/repertoar");
@@ -182,6 +178,7 @@ const IzvodjenjeForma = () => {
       console.error("Form submit error:", err);
       const errMsg =
         err?.response?.data?.message ||
+        err?.response?.data?.poruka ||
         (typeof err?.response?.data === "string" ? err.response.data : null) ||
         err.message ||
         "Došlo je do greške pri čuvanju izvođenja.";

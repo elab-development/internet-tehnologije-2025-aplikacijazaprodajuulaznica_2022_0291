@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import http from '../api/http';
 import '../css/KupiKartu.css'; 
 
 const KupiKartu = ({ addToCart }) => {
@@ -14,11 +14,11 @@ const KupiKartu = ({ addToCart }) => {
         const podaci = async () => {
             try {
                 // 1. Dohvatamo karte
-                const res = await axios.get(`http://localhost:8000/api/izvodjenja/${idIzvodjenja}/karte`);
+                const res = await http.get(`/izvodjenja/${idIzvodjenja}/karte`);
                 setKarte(res.data);
                 
                 // 2. Dohvatamo info o izvođenju
-                const resIzv = await axios.get(`http://localhost:8000/api/izvodjenja/${idIzvodjenja}`);
+                const resIzv = await http.get(`/izvodjenja/${idIzvodjenja}`);
                 setIzvodjenje(resIzv.data);
             } catch (e) {
                 console.error("Greška pri učitavanju podataka:", e);
@@ -77,7 +77,6 @@ const KupiKartu = ({ addToCart }) => {
                             
                             <div className="seat-grid-inner">
                                 {red.map(karta => {
-                                    // KLJUČNO: Gledamo kolonu 'prodata' iz tvoje baze
                                     const isAvailable = Number(karta.prodata) === 0;
                                     const seatClass = isAvailable ? 'available' : 'sold';
 
@@ -109,7 +108,7 @@ const KupiKartu = ({ addToCart }) => {
             </div>
 
             <div className="action-footer">
-                <button className="btn-secondary" onClick={() => navigate(-1)}>← Nazad</button>
+                <button className="btn-secondary" onClick={() => navigate(-1)}> Nazad</button>
                 <button className="btn-buy" onClick={() => navigate('/korpa')}>
                     Idi na plaćanje (Korpa) →
                 </button>

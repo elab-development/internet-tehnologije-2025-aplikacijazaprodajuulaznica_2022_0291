@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    //LOGOUT FUNKCIJA (Sada briše i token za Laravel)
+    //LOGOUT FUNKCIJA
     const logout = async () => {
         try {
             const token = localStorage.getItem("token");

@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import http from '../api/http';
 import "../css/Repertoar.css";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "http://localhost:8000/api";
-
-// POMOĆNE FUNKCIJE VAN KOMPONENTE
 const isUserLoggedIn = () => !!localStorage.getItem("token");
 
 const getMe = () => {
@@ -37,7 +34,7 @@ export default function Repertoar() {
     const fetchIzvodjenja = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`${API_BASE}/izvodjenja`);
+            const res = await http.get(`/izvodjenja`);
             let data = res.data || [];
 
             data.sort((a, b) => {
@@ -59,7 +56,7 @@ export default function Repertoar() {
         if (!izvodjenjeToDeleteId) return;
         try {
             const token = localStorage.getItem("token") || localStorage.getItem("access_token");
-            await axios.delete(`${API_BASE}/izvodjenja/${izvodjenjeToDeleteId}`, {
+            await http.delete(`/izvodjenja/${izvodjenjeToDeleteId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             

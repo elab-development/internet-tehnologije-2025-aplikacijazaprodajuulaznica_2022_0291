@@ -1,14 +1,14 @@
 import React, { useState } from 'react'; // SPOJENO
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 
-// Context
+// Kontekst
 import { AuthProvider } from './context/AuthContext';
 
 // Komponente
 import Header from './components/Header'; 
 import Footer from './components/Footer';
 
-// Pages
+// Stranice
 import Pocetna from './pages/Pocetna';
 import LogIn from './pages/LogIn';
 import Registracija from './pages/Registracija';
@@ -20,6 +20,9 @@ import  AdminRezervacije from './pages/AdminRezervacije';
 import KupiKartu from './pages/KupiKartu'; 
 import Korpa from './pages/Korpa';
 import AdminDashboard from './pages/AdminDashboard';
+
+// Rute
+import AdminRoute from './routes/AdminRoute';
 
 function App() {
     const [cart, setCart] = useState([]);
@@ -40,6 +43,7 @@ function App() {
                     style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
                 >
                     <Header cartItemCount={cart.length} />
+                    {/*<Header cartItemCount={cart.length} />*/}
 
                     <main style={{ flex: 1 }}>
                         <Routes>
@@ -57,11 +61,20 @@ function App() {
                             <Route path="/korpa" element={<Korpa cart={cart} setCart={setCart} removeFromCart={removeFromCart} />} />
 
                             {/* ADMIN RUTE */}
-                            <Route path="/admin" element={<AdminDashboard/>} />
-                            <Route path="/admin/test" element={<h1>Test radi!</h1>} />
-                            <Route path="/admin/izvodjenja/dodavanje" element={<IzvodjenjeForma />} />
-                            <Route path="/admin/izvodjenja/izmena/:id" element={<IzvodjenjeForma />} />
-                            <Route path="/admin/rezervacije" element={<AdminRezervacije />} />
+                            <Route
+                                path="/admin"
+                                element={
+                                        <AdminRoute>
+                                            <Outlet />
+                                        </AdminRoute>
+                                    }
+                            >
+                                <Route path="/admin" element={<AdminDashboard/>} />
+                                <Route path="/admin/test" element={<h1>Test radi!</h1>} />
+                                <Route path="/admin/izvodjenja/dodavanje" element={<IzvodjenjeForma />} />
+                                <Route path="/admin/izvodjenja/izmena/:id" element={<IzvodjenjeForma />} />
+                                <Route path="/admin/rezervacije" element={<AdminRezervacije />} />
+                            </Route>
                         </Routes>
                     </main>
 
