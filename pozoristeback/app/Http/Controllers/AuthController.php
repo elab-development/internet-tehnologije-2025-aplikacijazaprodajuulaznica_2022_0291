@@ -91,7 +91,7 @@ class AuthController extends Controller
         return response()->json([
             'poruka' => 'Dobrodošli, ' . $korisnik->korisnicko_ime,
             'access_token' => $token,
-            'uloga' => $korisnik->uloga,
+            'uloga' => $korisnik->uloga, //komentar
             'korisnik' => $korisnik // Dodajemo celog korisnika da React ima ID i ime
         ]);
     }
