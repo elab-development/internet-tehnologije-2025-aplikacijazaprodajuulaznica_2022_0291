@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:8000/api'; 
+// const BASE_URL = 'http://127.0.0.1:8000/api'; 
+const BASE_URL = 'http://localhost:8000/api';
 
 const http = axios.create({
     baseURL: BASE_URL,
@@ -8,7 +9,7 @@ const http = axios.create({
         'Content-Type': 'application/json',
         'Accept': 'application/json',
     },
-    timeout: 10000, 
+    timeout: 30000, 
 });
 
 http.interceptors.request.use((config) => {

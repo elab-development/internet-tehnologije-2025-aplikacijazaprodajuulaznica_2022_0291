@@ -63,6 +63,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        // return response()->json(['poruka' => 'Stigao si do backenda!'], 200);
         
         $request->validate([
             'korisnicko_ime' => 'required', //

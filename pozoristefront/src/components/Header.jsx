@@ -42,18 +42,29 @@ const Header = ({ cartItemCount = 0 }) => {
     const handleLogout = async () => {
         try {
             const token = localStorage.getItem("token");
-            await axios.post('http://localhost:8000/api/logout', {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            // Šaljemo zahtev samo ako token postoji
+            if (token) {
+                await axios.post('http://localhost:8000/api/logout', {}, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            }
         } catch (e) {
-            console.error("Greška pri odjavi na serveru", e);
+            // Logujemo grešku, ali je ignorišemo jer nas zanima samo čišćenje lokala
+            console.error("Greška pri odjavi na serveru (verovatno istekao token):", e);
+        } finally {
+            // OVO SE IZVRŠAVA BEZ OBZIRA NA GREŠKU 401
+            localStorage.removeItem("token");
+            localStorage.removeItem("me");
+            
+            // Resetujemo state da Header odmah prikaže "Prijava/Registracija"
+            setIsAuthenticated(false);
+            setMe(null);
+            
+            // Ručno okinemo storage event da bi drugi delovi aplikacije znali da smo izašli
+            window.dispatchEvent(new Event('storage'));
+            
+            nav("/login");
         }
-        
-        localStorage.removeItem("token");
-        localStorage.removeItem("me");
-        setIsAuthenticated(false);
-        setMe(null);
-        nav("/login");
     };
 
     const location = useLocation();

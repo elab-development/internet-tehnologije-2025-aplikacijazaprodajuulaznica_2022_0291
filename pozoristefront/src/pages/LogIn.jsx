@@ -40,12 +40,17 @@ export default function LogIn({ onLoginSuccess }) {
             localStorage.setItem("token", token);
             localStorage.setItem("me", JSON.stringify(user));
 
+            // 1. Prvo obavesti Header da su podaci stigli
+            window.dispatchEvent(new Event("storage"));
+
+            window.location.href = "/";
+
+            // 2. Pozovi uspeh (ako postoji)
             if (typeof onLoginSuccess === "function") {
                 onLoginSuccess(user);
             }
 
-            navigate("/");
-            window.dispatchEvent(new Event("storage"));
+            // navigate("/");
         } catch (err) {
             const errorMessage =
                 err.response?.data?.poruka ||
