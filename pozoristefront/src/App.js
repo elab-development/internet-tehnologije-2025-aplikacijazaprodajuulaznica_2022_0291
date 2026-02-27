@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // SPOJENO
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 
 // Kontekst
@@ -24,8 +24,18 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './routes/AdminRoute';
 
 function App() {
-    const [cart, setCart] = useState([]);
+    // 1. Prvo definišemo stanje (Inicijalizacija iz localStorage-a)
+    const [cart, setCart] = useState(() => {
+        const sacuvanaKorpa = localStorage.getItem('teatar_korpa');
+        return sacuvanaKorpa ? JSON.parse(sacuvanaKorpa) : [];
+    });
 
+    // 2. useEffect za automatsko čuvanje
+    useEffect(() => {
+        localStorage.setItem('teatar_korpa', JSON.stringify(cart));
+    }, [cart]);
+
+    // 3. Funkcije koje koriste to stanje
     const addToCart = (karta) => {
         setCart((prev) => [...prev, karta]);
     };

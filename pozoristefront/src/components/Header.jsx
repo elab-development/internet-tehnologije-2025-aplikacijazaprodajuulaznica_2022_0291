@@ -18,6 +18,8 @@ const getMe = () => {
 
 const Header = ({ cartItemCount = 0 }) => {
     const nav = useNavigate();
+
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     
     const [isAuthenticated, setIsAuthenticated] = useState(isAuthhed());
     const [me, setMe] = useState(getMe()); 
@@ -40,6 +42,10 @@ const Header = ({ cartItemCount = 0 }) => {
     }, []); 
     
     const handleLogout = async () => {
+        if (isLoggingOut) return;
+
+        setIsLoggingOut(true);
+
         try {
             const token = localStorage.getItem("token");
             // Šaljemo zahtev samo ako token postoji
@@ -63,6 +69,7 @@ const Header = ({ cartItemCount = 0 }) => {
             // Ručno okinemo storage event da bi drugi delovi aplikacije znali da smo izašli
             window.dispatchEvent(new Event('storage'));
             
+            setIsLoggingOut(false);
             nav("/login");
         }
     };
@@ -161,7 +168,14 @@ const Header = ({ cartItemCount = 0 }) => {
                             <span className={`user-chip ${isAdmin ? 'admin-chip' : ''}`}>
                                 {getUserDisplay()}
                             </span>
-                            <button className="btn-logout" onClick={handleLogout}>Odjava</button>
+                            <button 
+                                className="btn-logout" 
+                                onClick={handleLogout}
+                                disabled={isLoggingOut} // Onemogući klik
+                                style={{ opacity: isLoggingOut ? 0.7 : 1 }}
+                            >
+                                {isLoggingOut ? "Odjavljivanje..." : "Odjava"}
+                            </button>
                         </>
                     )}
                 </div>

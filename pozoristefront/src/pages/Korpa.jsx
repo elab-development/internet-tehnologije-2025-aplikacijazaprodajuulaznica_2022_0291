@@ -6,19 +6,20 @@ import '../css/Korpa.css';
 const Korpa = ({ cart, removeFromCart, setCart }) => {
     const navigate = useNavigate();
     
-    // State za istoriju rezervacija iz baze
+    // 1. OBAVEZNO DODATI: State za sprečavanje duplog klika
+    const [isProcessing, setIsProcessing] = useState(false);
+    
     const [rezervacijeIzBaze, setRezervacijeIzBaze] = useState([]);
     const [loadingRezervacije, setLoadingRezervacije] = useState(false);
     const [errorRezervacije, setErrorRezervacije] = useState(null);
+    const [kurs, setKurs] = useState(null);
 
     const userData = localStorage.getItem('me');
     const ulogovaniKorisnik = userData ? JSON.parse(userData) : null;
     const token = localStorage.getItem('token');
 
-    // Funkcija za dohvatanje rezervacija ulogovanog korisnika
     const fetchMojeRezervacije = async () => {
         if (!ulogovaniKorisnik || !token) return;
-        
         setLoadingRezervacije(true);
         setErrorRezervacije(null);
         try {
@@ -32,15 +33,25 @@ const Korpa = ({ cart, removeFromCart, setCart }) => {
         }
     };
 
-    // Učitaj istoriju čim se komponenta pokrene
     useEffect(() => {
         fetchMojeRezervacije();
     }, []);
 
-    // Računanje ukupne cene trenutne korpe
+    useEffect(() => {
+        fetch('https://open.er-api.com/v6/latest/RSD')
+            .then(res => res.json())
+            .then(data => {
+                setKurs(data.rates.EUR);
+            })
+            .catch(err => console.error("Greška pri učitavanju kursa:", err));
+    }, []);
+
     const ukupnaCena = cart.reduce((sum, item) => sum + (Number(item.cena) || 0), 0);
 
     const handleCheckout = async () => {
+        // Sprečavamo višestruke zahteve
+        if (isProcessing) return;
+
         if (!ulogovaniKorisnik) {
             alert("Moraš biti ulogovana!");
             navigate('/login');
@@ -48,6 +59,9 @@ const Korpa = ({ cart, removeFromCart, setCart }) => {
         }
 
         if (cart.length === 0) return;
+
+        // Zaključavamo dugme
+        setIsProcessing(true);
 
         const payload = {
             korisnik_id: ulogovaniKorisnik.id, 
@@ -58,16 +72,22 @@ const Korpa = ({ cart, removeFromCart, setCart }) => {
         try {
             await http.post('/rezervacije', payload);
             alert("Uspešna rezervacija! Tvoje karte su spremne.");
+            
+            // Čišćenje korpe
             setCart([]); 
+            localStorage.removeItem('teatar_korpa'); // Brišemo podatke iz browsera
+            
             fetchMojeRezervacije(); 
         } catch (err) {
             alert("Greška: " + (err.response?.data?.poruka || "Problem sa serverom"));
+        } finally {
+            // Otključavamo dugme na kraju
+            setIsProcessing(false);
         }
     };
 
     return (
         <div className="korpa-container">
-            {/* SEKCIJA 1: AKTIVNA KORPA (LOKALNA) */}
             <div className="cart-section">
                 <h2 className="section-title">Vaša korpa</h2>
                 
@@ -97,12 +117,24 @@ const Korpa = ({ cart, removeFromCart, setCart }) => {
 
                         <div className="cart-summary">
                             <p>Ukupno za uplatu:</p>
-                            <span className="total-amount">{ukupnaCena.toFixed(0)} RSD</span>
+                            <div style={{ textAlign: 'right' }}>
+                                <span className="total-amount">{ukupnaCena.toFixed(0)} RSD</span>
+                                {kurs && (
+                                    <div style={{ fontSize: '0.9rem', color: '#888', marginTop: '5px', fontStyle: 'italic' }}>
+                                        (informativno: {(ukupnaCena * kurs).toFixed(2)} EUR)
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         <div style={{ textAlign: 'right', marginTop: '20px' }}>
-                            <button className="btn-checkout" onClick={handleCheckout}>
-                                Potvrdi i plati
+                            {/* Dodajemo disabled i promenu teksta na dugmetu */}
+                            <button 
+                                className="btn-checkout" 
+                                onClick={handleCheckout} 
+                                disabled={isProcessing}
+                            >
+                                {isProcessing ? "Obrađujem..." : "Potvrdi i plati"}
                             </button>
                         </div>
                     </>
@@ -111,7 +143,6 @@ const Korpa = ({ cart, removeFromCart, setCart }) => {
 
             <div className="divider-gold"></div>
 
-            {/* SEKCIJA 2: ISTORIJA IZ BAZE */}
             <div className="reservations-section">
                 <h2 className="section-title">Moje prethodne rezervacije</h2>
                 
@@ -130,17 +161,16 @@ const Korpa = ({ cart, removeFromCart, setCart }) => {
                                         <span className="res-date">{new Date(rezervacija.created_at).toLocaleDateString('sr-RS')}</span>
                                     </div>
                                     
-                                <div className="res-items-detail">
-                                    {/* Prolazimo kroz stavke i ispisujemo naziv predstave i tačan broj sedišta */}
-                                    {rezervacija.stavke && rezervacija.stavke.map(stavka => (
-                                        <div key={stavka.id} className="res-mini-item">
-                                            • {stavka.karta?.izvodjenje?.predstava?.naziv || "Predstava"} 
-                                            <span style={{ marginLeft: '5px' }}>
-                                                (Sedište: <strong>{stavka.karta?.broj_sedista || "N/A"}</strong>)
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
+                                    <div className="res-items-detail">
+                                        {rezervacija.stavke && rezervacija.stavke.map(stavka => (
+                                            <div key={stavka.id} className="res-mini-item">
+                                                • {stavka.karta?.izvodjenje?.predstava?.naziv || "Predstava"} 
+                                                <span style={{ marginLeft: '5px' }}>
+                                                    (Sedište: <strong>{stavka.karta?.broj_sedista || "N/A"}</strong>)
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
 
                                     <div className="res-card-footer">
                                         <div className="res-status-box">
