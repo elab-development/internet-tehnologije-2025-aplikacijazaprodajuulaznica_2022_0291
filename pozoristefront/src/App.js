@@ -22,6 +22,7 @@ import Korpa from './pages/Korpa';
 import AdminDashboard from './pages/AdminDashboard';
 
 import AdminRoute from './routes/AdminRoute';
+import DetaljiPredstave from './pages/DetaljiPredstave';
 
 function App() {
     // 1. Prvo definišemo stanje (Inicijalizacija iz localStorage-a)
@@ -59,6 +60,7 @@ function App() {
                             <Route path="/" element={<Pocetna />} />
                             <Route path="/login" element={<LogIn />} />
                             <Route path="/registracija" element={<Registracija />} />
+                            <Route path="/predstava/:id" element={<DetaljiPredstave />} />
 
                             {/* JAVNE STRANICE */}
                             <Route path="/repertoar" element={<Repertoar />} /> 

@@ -1,0 +1,176 @@
+/* ==========================================================================
+   STRANICA: DETALJI PREDSTAVE
+   Opis: Stilovi su ograničeni na .show-details-container da ne kvare Repertoar.
+   ========================================================================== */
+
+/* --- GLAVNI KONTEJNER --- */
+.show-details-container {
+    background: white;
+    padding: 40px 60px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+    margin: 40px auto 60px;
+}
+
+/* --- DUGME NAZAD (MINIMALISTIČKI) --- */
+.show-details-container .btn-back {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #666;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+}
+
+.show-details-container .btn-back:hover {
+    color: #A52A2A;
+    transform: translateX(-5px);
+}
+
+/* --- RASPORED (FLEX GRID) --- */
+.show-details-container .show-layout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+/* --- LEVA STRANA: POSTER --- */
+.show-details-container .poster-wrapper {
+    flex: 0 0 auto; /* Ne dozvoljava posteru da se skuplja */
+}
+
+.show-details-container .show-poster {
+    width: 100%;
+    max-width: 320px; /* Optimalna širina za uspravni poster */
+    height: auto;
+    border-radius: 16px;
+    object-fit: cover;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+/* --- DESNA STRANA: INFO BOX --- */
+.show-details-container .show-info-box {
+    flex: 1; /* Zauzima sav preostali prostor */
+    padding-left: 10px;
+}
+
+/* SPECIFIČNI NASLOV - Sada više ne utiče na Repertoar! */
+.show-details-container .show-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: #222;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+/* META PODACI (Trajanje, Reditelj) */
+.show-details-container .show-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.show-details-container .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+}
+
+.show-details-container .meta-item i {
+    color: #A52A2A; /* Ikonice u tvojoj bordo boji */
+}
+
+/* SEKCIJA OPISA */
+.show-details-container hr {
+    margin: 25px 0;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+.show-details-container h5 {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.show-details-container .show-description {
+    line-height: 1.8;
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 35px;
+}
+
+/* GLAVNO DUGME */
+.show-details-container .btn-rezervisi {
+    background-color: #A52A2A;
+    border: none;
+    padding: 14px 35px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(165, 42, 42, 0.2);
+}
+
+.show-details-container .btn-rezervisi:hover {
+    background-color: #8B0000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(165, 42, 42, 0.3);
+}
+
+/* --- RESPONSIVE DIZAJN --- */
+
+/* Tableti i manji ekrani */
+@media (max-width: 992px) {
+    .show-details-container .show-layout {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .show-details-container .show-info-box {
+        padding-left: 0;
+        text-align: center;
+    }
+
+    .show-details-container .show-meta {
+        justify-content: center;
+    }
+
+    .show-details-container .show-title {
+        font-size: 2.1rem;
+    }
+}
+
+/* Mobilni telefoni */
+@media (max-width: 576px) {
+    .show-details-container {
+        padding: 20px;
+        margin-top: 100px;
+    }
+
+    .show-details-container .show-poster {
+        max-width: 260px;
+    }
+
+    .show-details-container .show-title {
+        font-size: 1.8rem;
+    }
+}

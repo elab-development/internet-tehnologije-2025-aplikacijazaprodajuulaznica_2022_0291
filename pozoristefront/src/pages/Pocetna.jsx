@@ -82,32 +82,32 @@ export const Pocetna = () => {
                     <p className="section-subtitle">Predstave koje se ne smeju propustiti.</p>
                    
                     <div className="shows-list">
-                        <div className="show-card">
+                        <div className="show-card" onClick={() => navigate('/predstava/3')} style={{cursor: 'pointer'}}>
                             <img src="/slike/labudovo_jezero.jpg" alt="Predstava A" />
                             <h4>Labudovo jezero</h4>
                             <p>Balet</p>
                         </div>
-                        <div className="show-card">
+                        <div className="show-card" onClick={() => navigate('/predstava/5')} style={{cursor: 'pointer'}}>
                             <img src="/slike/krcko_orascic.jpg" alt="Predstava B" />
                             <h4>Krcko Oraščić</h4>
                             <p>Balet</p>
                         </div>
-                        <div className="show-card">
+                        <div className="show-card" onClick={() => navigate('/predstava/6')} style={{cursor: 'pointer'}}>
                             <img src="/slike/mamma_mia.jpg" alt="Predstava C" />
                             <h4>Mamma Mia!</h4>
                             <p>Mjuzikl</p>
                         </div>
-                        <div className="show-card">
+                        <div className="show-card" onClick={() => navigate('/predstava/4')} style={{cursor: 'pointer'}}>
                             <img src="/slike/cigani.jpg" alt="Predstava D" />
                             <h4>Cigani lete u nebo</h4>
                             <p>Mjuzikl</p>
                         </div>
-                        <div className="show-card">
-                            <img src="/slike/little-prince.jpg" alt="Predstava E" />
-                            <h4>Mali princ</h4>
-                            <p>Mjuzikl</p>
+                        <div className="show-card" onClick={() => navigate('/predstava/11')} style={{cursor: 'pointer'}}>
+                            <img src="/slike/majstor.jpg" alt="Predstava E" />
+                            <h4>Majstor i Margarita</h4>
+                            <p>Drama</p>
                         </div>
-                        <div className="show-card">
+                        <div className="show-card" onClick={() => navigate('/predstava/9')} style={{cursor: 'pointer'}}>
                             <img src="/slike/fantom.jpg" alt="Predstava F" />
                             <h4>Fantom iz opere</h4>
                             <p>Mjuzikl</p>
