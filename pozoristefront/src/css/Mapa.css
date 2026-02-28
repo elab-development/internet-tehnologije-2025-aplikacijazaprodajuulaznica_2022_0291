@@ -1,0 +1,33 @@
+.map-wrapper {
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+}
+
+.leaflet-container-custom {
+    height: 400px;
+    width: 100%;
+    z-index: 1; /* Da ne ide preko Headera */
+}
+
+/* Stil za mali prozorčić koji iskoči kad se klikne na marker */
+.map-popup h6 {
+    margin: 0;
+    color: #A52A2A;
+    font-weight: 700;
+}
+
+.map-popup p {
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* Prilagođavanje za mobilne telefone */
+@media (max-width: 768px) {
+    .leaflet-container-custom {
+        height: 300px;
+    }
+}

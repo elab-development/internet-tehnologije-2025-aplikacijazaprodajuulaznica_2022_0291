@@ -1,100 +1,102 @@
-.contact-page-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fdf2f2;
-    min-height: 80vh;
-}
-
-.contact-hero-mini {
-    text-align: center;
-    padding: 40px 20px 20px 20px;
-}
-
-.contact-hero-mini h1 {
-    font-family: 'Playfair Display';
-    font-size: 2.5rem;
-    color: #1a1a1a;
-    margin-bottom: 10px;
-}
-
-.contact-main-content {
+.final-page-container {
+    background-color: #fdf2f2 !important;
+    min-height: 100vh;
     width: 100%;
+    padding-bottom: 80px;
+    font-family: 'Lora', serif !important;
+}
+
+.final-hero-section {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.final-hero-section h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: #1a1a1a;
+}
+
+.final-flex-layout {
     display: flex;
+    gap: 40px; /*RAZMAK IZMEĐU KARTICA */
     justify-content: center;
-    padding-bottom: 60px;
+    align-items: stretch;
 }
 
-.contact-card {
-    width: 90%;
-    max-width: 500px;
-    background: #ffffff;
-    padding: 35px;
+.final-card-box {
+    background: #ffffff !important;
+    padding: 40px;
     border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(139, 26, 26, 0.1);
-}
-
-.input-group {
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    flex: 1; /* Obe kartice će biti iste širine */
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 20px;
 }
 
-.input-group label {
-    font-weight: 600;
+.final-title {
     color: #8b1a1a;
-    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 25px;
 }
 
-.contact-form input, 
-.contact-form textarea {
-    padding: 12px 15px;
+/* FORMA I FONT */
+.final-input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.final-input-group label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.final-input-group input, 
+.final-input-group textarea {
+    font-family: 'Lora', serif !important; 
+    padding: 12px;
     border: 1px solid #e0b8b8;
     border-radius: 8px;
-    font-size: 1rem;
     outline: none;
-    transition: 0.3s;
 }
 
-.contact-form input:focus, 
-.contact-form textarea:focus {
-    border-color: #8b1a1a;
-    box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.1);
-}
-
-.submit-btn {
-    width: 100%;
+.final-submit-btn {
     background-color: #8b1a1a;
     color: white;
     padding: 15px;
     border: none;
     border-radius: 8px;
-    font-size: 1rem;
     font-weight: 700;
-    cursor: pointer;
-    text-transform: uppercase;
+    transition: 0.3s;
 }
 
-.submit-btn:hover {
-    background-color: #2d2d2d;
+.final-submit-btn:hover {
+    background-color: #1a1a1a;
 }
 
-.success-banner {
-    margin-top: 20px;
-    color: #28a745;
-    text-align: center;
-    font-weight: bold;
+
+.final-map-container {
+    height: 350px !important;
+    min-height: 350px; 
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    border: 1px solid #eee;
+    z-index: 1;
 }
 
-.contact-form input::placeholder, 
-.contact-form textarea::placeholder {
-    font-family: 'Lora', serif !important;
-    color: #999;
-    opacity: 1;
+.final-info-list p {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: #333;
 }
 
-.contact-form input, 
-.contact-form textarea {
-    font-family: 'Lora', serif !important;
+@media (max-width: 992px) {
+    .final-flex-layout {
+        flex-direction: column;
+    }
 }
