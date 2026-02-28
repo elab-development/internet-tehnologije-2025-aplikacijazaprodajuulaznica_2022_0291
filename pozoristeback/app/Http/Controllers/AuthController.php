@@ -15,8 +15,29 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Mail\ResetPasswordMail;
 
+use OpenApi\Attributes as OA;
+
 class AuthController extends Controller
 {
+
+    #[OA\Post(
+        path: "/api/registracija",
+        summary: "Registracija novog korisnika",
+        tags: ["Autentifikacija"]
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ["korisnicko_ime", "email", "lozinka"],
+            properties: [
+                new OA\Property(property: "korisnicko_ime", type: "string", example: "marija_m"),
+                new OA\Property(property: "email", type: "string", example: "marija@example.com"),
+                new OA\Property(property: "lozinka", type: "string", example: "lozinka123")
+            ]
+        )
+    )]
+    #[OA\Response(response: 201, description: "Uspešna registracija")]
+    #[OA\Response(response: 400, description: "Greška u validaciji")]
     public function registracija(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -61,6 +82,25 @@ class AuthController extends Controller
         ], 201);
     }
 
+
+    #[OA\Post(
+        path: "/api/login",
+        summary: "Logovanje korisnika",
+        tags: ["Autentifikacija"]
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ["korisnicko_ime", "lozinka"],
+            properties: [
+                new OA\Property(property: "korisnicko_ime", type: "string", example: "marija_m"),
+                new OA\Property(property: "lozinka", type: "string", example: "lozinka123")
+            ]
+        )
+    )]
+    #[OA\Response(response: 200, description: "Uspešan login")]
+    #[OA\Response(response: 401, description: "Pogrešni podaci")]
+    #[OA\Response(response: 403, description: "Nalog nije verifikovan")]
     public function login(Request $request)
     {
         // return response()->json(['poruka' => 'Stigao si do backenda!'], 200);
@@ -97,6 +137,14 @@ class AuthController extends Controller
         ]);
     }
 
+
+    #[OA\Post(
+        path: "/api/logout",
+        summary: "Odjava korisnika",
+        security: [["sanctum" => []]],
+        tags: ["Autentifikacija"]
+    )]
+    #[OA\Response(response: 200, description: "Uspešan logout")]
     public function logout(Request $request)
     {
         // Uzimamo trenutno ulogovanog korisnika i brišemo token koji je iskoristio za ovaj zahtev
@@ -107,6 +155,14 @@ class AuthController extends Controller
         ]);
     }
 
+
+    #[OA\Get(
+        path: "/api/profil",
+        summary: "Podaci o ulogovanom korisniku",
+        security: [["sanctum" => []]],
+        tags: ["Autentifikacija"]
+    )]
+    #[OA\Response(response: 200, description: "Uspešno")]
     public function profil(Request $request)
     {
         return response()->json([
@@ -116,6 +172,28 @@ class AuthController extends Controller
     }
 
 
+    
+    #[OA\Get(
+        path: "/api/verify/{id}/{hash}",
+        summary: "Verifikacija email adrese",
+        tags: ["Autentifikacija"]
+    )]
+    #[OA\Parameter(
+        name: "id",
+        in: "path",
+        description: "ID korisnika",
+        required: true,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Parameter(
+        name: "hash",
+        in: "path",
+        description: "SHA-1 hash email adrese",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Response(response: 200, description: "Email uspešno verifikovan")]
+    #[OA\Response(response: 401, description: "Nevalidan ili istekao potpis")]
     public function verify(Request $request) {
         //Da li je URL validan
         if (!$request->hasValidSignature()) {
@@ -133,6 +211,19 @@ class AuthController extends Controller
         return response()->json(["poruka" => "Email je uspešno verifikovan!"]);
     }
 
+
+    #[OA\Post(
+        path: "/api/zaboravljena-lozinka",
+        summary: "Slanje mejla za reset lozinke",
+        tags: ["Autentifikacija"]
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            properties: [new OA\Property(property: "email", type: "string", example: "marija@example.com")]
+        )
+    )]
+    #[OA\Response(response: 200, description: "Mejl poslat")]
     public function zaboravljenaLozinka(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -161,6 +252,25 @@ class AuthController extends Controller
     }
 
 
+
+    #[OA\Post(
+        path: "/api/resetuj-lozinku",
+        summary: "Resetovanje lozinke",
+        tags: ["Autentifikacija"]
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ["token", "email", "lozinka"],
+            properties: [
+                new OA\Property(property: "token", type: "string"),
+                new OA\Property(property: "email", type: "string"),
+                new OA\Property(property: "lozinka", type: "string"),
+                new OA\Property(property: "lozinka_confirmation", type: "string")
+            ]
+        )
+    )]
+    #[OA\Response(response: 200, description: "Lozinka promenjena")]
     public function resetujLozinku(Request $request)
     {
         $request->validate([

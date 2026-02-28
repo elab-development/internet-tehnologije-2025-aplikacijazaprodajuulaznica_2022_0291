@@ -10,8 +10,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB; // Za transakcije
 
+use OpenApi\Attributes as OA;
+
 class IzvodjenjeController extends Controller
 {
+
+    #[OA\Get(
+        path: "/api/izvodjenja",
+        summary: "Prikaz svih planiranih izvođenja",
+        tags: ["Izvođenja"]
+    )]
+    #[OA\Response(response: 200, description: "Uspešno")]
     public function index()
     {
         $izvodjenja = Izvodjenje::with(['predstava', 'sala'])->get();
@@ -21,6 +30,29 @@ class IzvodjenjeController extends Controller
     /**
      * Kreira novo izvođenje i AUTOMATSKI generiše karte na osnovu kapaciteta sale.
      */
+
+
+    #[OA\Post(
+        path: "/api/izvodjenja",
+        summary: "Kreiranje novog izvođenja i automatsko generisanje karata",
+        description: "Kreira izvođenje i na osnovu kapaciteta sale generiše karte (npr. A1, A2...).",
+        tags: ["Izvođenja"],
+        security: [["sanctum" => []]]
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            required: ["predstava_id", "sala_id", "datum_izvodjenja", "vreme_pocetka", "osnovna_cena"],
+            properties: [
+                new OA\Property(property: "predstava_id", type: "integer", example: 1),
+                new OA\Property(property: "sala_id", type: "integer", example: 2),
+                new OA\Property(property: "datum_izvodjenja", type: "string", format: "date", example: "2024-05-20"),
+                new OA\Property(property: "vreme_pocetka", type: "string", example: "20:00"),
+                new OA\Property(property: "osnovna_cena", type: "number", example: 1200)
+            ]
+        )
+    )]
+    #[OA\Response(response: 201, description: "Izvođenje kreirano i karte generisane")]
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -74,6 +106,13 @@ class IzvodjenjeController extends Controller
     }
 
 
+    #[OA\Get(
+        path: "/api/izvodjenja/{id}",
+        summary: "Detalji jednog izvođenja",
+        tags: ["Izvođenja"]
+    )]
+    #[OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))]
+    #[OA\Response(response: 200, description: "Uspešno")]
     public function show($id)
     {
         $izvodjenje = Izvodjenje::with(['predstava', 'sala'])->find($id);
@@ -86,6 +125,13 @@ class IzvodjenjeController extends Controller
     }
 
 
+    #[OA\Put(
+        path: "/api/izvodjenja/{id}",
+        summary: "Ažuriranje podataka o izvođenju",
+        tags: ["Izvođenja"],
+        security: [["sanctum" => []]]
+    )]
+    #[OA\Response(response: 200, description: "Uspešno ažurirano")]
     public function update(Request $request, $id)
     {
         $izvodjenje = Izvodjenje::find($id);
@@ -118,6 +164,14 @@ class IzvodjenjeController extends Controller
      * Briše izvođenje. Zbog 'cascadeOnDelete' u migraciji, 
      * automatski će se obrisati i sve karte vezane za ovo izvođenje.
      */
+
+    #[OA\Delete(
+        path: "/api/izvodjenja/{id}",
+        summary: "Brisanje izvođenja i svih njegovih karata",
+        tags: ["Izvođenja"],
+        security: [["sanctum" => []]]
+    )]
+    #[OA\Response(response: 200, description: "Obrisano")]
     public function destroy($id)
     {
         $izvodjenje = Izvodjenje::find($id);
@@ -134,6 +188,14 @@ class IzvodjenjeController extends Controller
     /**
      * Vraća sva izvođenja za određenu predstavu (filtriranje).
      */
+
+    #[OA\Get(
+        path: "/api/predstave/{predstavaId}/izvodjenja",
+        summary: "Sva izvođenja određene predstave",
+        tags: ["Izvođenja"]
+    )]
+    #[OA\Parameter(name: "predstavaId", in: "path", required: true, schema: new OA\Schema(type: "integer"))]
+    #[OA\Response(response: 200, description: "Uspešno")]
     public function izvodjenjaZaPredstavu($predstavaId)
     {
         $izvodjenja = Izvodjenje::where('predstava_id', $predstavaId)
@@ -146,6 +208,19 @@ class IzvodjenjeController extends Controller
     /**
      * Vraća sva izvođenja u određenoj sali.
      */
+
+    #[OA\Get(
+        path: "/api/sale/{salaId}/izvodjenja",
+        summary: "Prikaz svih izvođenja u određenoj sali",
+        tags: ["Izvođenja"]
+    )]
+    #[OA\Parameter(
+        name: "salaId",
+        in: "path",
+        required: true,
+        schema: new OA\Schema(type: "integer")
+    )]
+    #[OA\Response(response: 200, description: "Uspešno")]
     public function izvodjenjaZaSalu($salaId)
     {
         $izvodjenja = Izvodjenje::where('sala_id', $salaId)

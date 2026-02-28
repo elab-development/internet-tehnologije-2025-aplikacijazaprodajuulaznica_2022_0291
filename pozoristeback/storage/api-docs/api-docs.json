@@ -1,0 +1,1233 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Teatar Maska API",
+        "description": "API dokumentacija za seminarski rad",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Lokalni server"
+        }
+    ],
+    "paths": {
+        "/api/registracija": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Registracija novog korisnika",
+                "operationId": "e13e0a60dbbe6af32c91a701294258ca",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "korisnicko_ime",
+                                    "email",
+                                    "lozinka"
+                                ],
+                                "properties": {
+                                    "korisnicko_ime": {
+                                        "type": "string",
+                                        "example": "marija_m"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "marija@example.com"
+                                    },
+                                    "lozinka": {
+                                        "type": "string",
+                                        "example": "lozinka123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Uspešna registracija"
+                    },
+                    "400": {
+                        "description": "Greška u validaciji"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Logovanje korisnika",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "korisnicko_ime",
+                                    "lozinka"
+                                ],
+                                "properties": {
+                                    "korisnicko_ime": {
+                                        "type": "string",
+                                        "example": "marija_m"
+                                    },
+                                    "lozinka": {
+                                        "type": "string",
+                                        "example": "lozinka123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Uspešan login"
+                    },
+                    "401": {
+                        "description": "Pogrešni podaci"
+                    },
+                    "403": {
+                        "description": "Nalog nije verifikovan"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Odjava korisnika",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Uspešan logout"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/profil": {
+            "get": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Podaci o ulogovanom korisniku",
+                "operationId": "0548ac70cc831e9f1ab801f6e3fde726",
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/verify/{id}/{hash}": {
+            "get": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Verifikacija email adrese",
+                "operationId": "699b7af6ac4eb76e02cb03c0a3a8f937",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID korisnika",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "hash",
+                        "in": "path",
+                        "description": "SHA-1 hash email adrese",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Email uspešno verifikovan"
+                    },
+                    "401": {
+                        "description": "Nevalidan ili istekao potpis"
+                    }
+                }
+            }
+        },
+        "/api/zaboravljena-lozinka": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Slanje mejla za reset lozinke",
+                "operationId": "db6244f6b4e031d9a0daef78de69ee18",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "marija@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mejl poslat"
+                    }
+                }
+            }
+        },
+        "/api/resetuj-lozinku": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Resetovanje lozinke",
+                "operationId": "e5433301bee09db161fd5879b6b285e0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token",
+                                    "email",
+                                    "lozinka"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "lozinka": {
+                                        "type": "string"
+                                    },
+                                    "lozinka_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Lozinka promenjena"
+                    }
+                }
+            }
+        },
+        "/api/izvodjenja": {
+            "get": {
+                "tags": [
+                    "Izvođenja"
+                ],
+                "summary": "Prikaz svih planiranih izvođenja",
+                "operationId": "abf404568c68dc3dd5ef113178385b7f",
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Izvođenja"
+                ],
+                "summary": "Kreiranje novog izvođenja i automatsko generisanje karata",
+                "description": "Kreira izvođenje i na osnovu kapaciteta sale generiše karte (npr. A1, A2...).",
+                "operationId": "d58a3b6639affa0053755667ee1aae41",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "predstava_id",
+                                    "sala_id",
+                                    "datum_izvodjenja",
+                                    "vreme_pocetka",
+                                    "osnovna_cena"
+                                ],
+                                "properties": {
+                                    "predstava_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "sala_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "datum_izvodjenja": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-05-20"
+                                    },
+                                    "vreme_pocetka": {
+                                        "type": "string",
+                                        "example": "20:00"
+                                    },
+                                    "osnovna_cena": {
+                                        "type": "number",
+                                        "example": 1200
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Izvođenje kreirano i karte generisane"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/izvodjenja/{id}": {
+            "get": {
+                "tags": [
+                    "Izvođenja"
+                ],
+                "summary": "Detalji jednog izvođenja",
+                "operationId": "04274c3d548833bd175b1acef8d0a04e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Izvođenja"
+                ],
+                "summary": "Ažuriranje podataka o izvođenju",
+                "operationId": "24a7c23d5439bd4e3d31da051699620a",
+                "responses": {
+                    "200": {
+                        "description": "Uspešno ažurirano"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Izvođenja"
+                ],
+                "summary": "Brisanje izvođenja i svih njegovih karata",
+                "description": "Briše izvođenje. Zbog 'cascadeOnDelete' u migraciji, \nautomatski će se obrisati i sve karte vezane za ovo izvođenje.",
+                "operationId": "a8d1f51281a274a67dde746f9a5ae463",
+                "responses": {
+                    "200": {
+                        "description": "Obrisano"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/predstave/{predstavaId}/izvodjenja": {
+            "get": {
+                "tags": [
+                    "Izvođenja"
+                ],
+                "summary": "Sva izvođenja određene predstave",
+                "description": "Vraća sva izvođenja za određenu predstavu (filtriranje).",
+                "operationId": "f3b0f7ae56419cbb1ecdd9dbd22e4870",
+                "parameters": [
+                    {
+                        "name": "predstavaId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    }
+                }
+            }
+        },
+        "/api/sale/{salaId}/izvodjenja": {
+            "get": {
+                "tags": [
+                    "Izvođenja"
+                ],
+                "summary": "Prikaz svih izvođenja u određenoj sali",
+                "description": "Vraća sva izvođenja u određenoj sali.",
+                "operationId": "820fc54a460d9c2330faede641047b96",
+                "parameters": [
+                    {
+                        "name": "salaId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    }
+                }
+            }
+        },
+        "/api/karte": {
+            "get": {
+                "tags": [
+                    "Karte"
+                ],
+                "summary": "Prikaz svih karata u sistemu",
+                "operationId": "ea39ba7b8b3e9c3638b51613a3c7915d",
+                "responses": {
+                    "200": {
+                        "description": "Uspešno učitane karte"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Karte"
+                ],
+                "summary": "Dodavanje pojedinačne karte",
+                "description": "Store metoda - samo za vanredno dodavanje pojedinačne karte.",
+                "operationId": "dfcccfd461b3d2439874dff4187cdcdc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "izvodjenje_id",
+                                    "broj_sedista",
+                                    "cena"
+                                ],
+                                "properties": {
+                                    "izvodjenje_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "broj_sedista": {
+                                        "type": "integer",
+                                        "example": 12
+                                    },
+                                    "cena": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 800.5
+                                    },
+                                    "prodata": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Karta kreirana"
+                    },
+                    "422": {
+                        "description": "Greška u validaciji"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/karte/{id}": {
+            "get": {
+                "tags": [
+                    "Karte"
+                ],
+                "summary": "Detalji pojedinačne karte",
+                "description": "Detalji jedne karte.",
+                "operationId": "8a1b1526d092cb06c2564bce0fe14502",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    },
+                    "404": {
+                        "description": "Karta nije pronađena"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Karte"
+                ],
+                "summary": "Brisanje karte",
+                "description": "Brisanje karte",
+                "operationId": "1796d4bf2e97c3eda1c7423dcc9734c3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obrisano"
+                    },
+                    "404": {
+                        "description": "Karta nije pronađena"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/karte/izvodjenje/{izvodjenjeId}": {
+            "get": {
+                "tags": [
+                    "Karte"
+                ],
+                "summary": "Prikaz svih karata za određeno izvođenje",
+                "description": "Vraća i slobodne i prodate karte radi prikaza sale u React-u.",
+                "operationId": "fb08f9718fb252d49752bd77a027e10c",
+                "parameters": [
+                    {
+                        "name": "izvodjenjeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    },
+                    "404": {
+                        "description": "Izvođenje nije pronađeno"
+                    }
+                }
+            }
+        },
+        "/api/predstave": {
+            "get": {
+                "tags": [
+                    "Predstave"
+                ],
+                "summary": "Prikaz svih predstava",
+                "operationId": "bd75bc54dfef10a9df4d727d289388b0",
+                "responses": {
+                    "200": {
+                        "description": "Uspešno učitane predstave"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Predstave"
+                ],
+                "summary": "Dodavanje nove predstave",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "866e48ac223988079a5f535acb5fde5b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "naziv",
+                                    "opis",
+                                    "reditelj",
+                                    "trajanje_min",
+                                    "img_url"
+                                ],
+                                "properties": {
+                                    "naziv": {
+                                        "type": "string",
+                                        "example": "Gospođa ministarka"
+                                    },
+                                    "opis": {
+                                        "type": "string",
+                                        "example": "Komedija Branislava Nušića"
+                                    },
+                                    "reditelj": {
+                                        "type": "string",
+                                        "example": "Jagoš Marković"
+                                    },
+                                    "trajanje_min": {
+                                        "type": "integer",
+                                        "example": 105
+                                    },
+                                    "img_url": {
+                                        "type": "string",
+                                        "example": "https://link-ka-slici.com/slika.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Uspešno kreirano"
+                    },
+                    "422": {
+                        "description": "Greška u validaciji"
+                    }
+                }
+            }
+        },
+        "/api/predstave/{id}": {
+            "get": {
+                "tags": [
+                    "Predstave"
+                ],
+                "summary": "Prikaz jedne predstave",
+                "description": "Display the specified resource.",
+                "operationId": "62b55ce8585f385297dbdc4b9c886a68",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    },
+                    "404": {
+                        "description": "Nije pronađena"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Predstave"
+                ],
+                "summary": "Ažuriranje postojeće predstave",
+                "description": "Update the specified resource in storage.",
+                "operationId": "db9b9c245a38ffd1e67ac40627fb0dd2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID predstave koju ažurirate",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "naziv": {
+                                        "type": "string",
+                                        "example": "Nova verzija naziva"
+                                    },
+                                    "opis": {
+                                        "type": "string",
+                                        "example": "Novi opis predstave..."
+                                    },
+                                    "reditelj": {
+                                        "type": "string",
+                                        "example": "Ime novog reditelja"
+                                    },
+                                    "trajanje_min": {
+                                        "type": "integer",
+                                        "example": 110
+                                    },
+                                    "img_url": {
+                                        "type": "string",
+                                        "example": "https://novi-link.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Predstava uspešno ažurirana"
+                    },
+                    "404": {
+                        "description": "Predstava nije pronađena"
+                    },
+                    "422": {
+                        "description": "Greška u validaciji podataka"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Predstave"
+                ],
+                "summary": "Brisanje predstave",
+                "description": "Remove the specified resource from storage.",
+                "operationId": "ee740461ad31c4379ff42f03ca5d59d9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obrisano"
+                    }
+                }
+            }
+        },
+        "/api/predstave/pretraga": {
+            "get": {
+                "tags": [
+                    "Predstave"
+                ],
+                "summary": "Pretraga predstava po nazivu",
+                "operationId": "0634ec242ad2bd5739d3bc78827a5b7d",
+                "parameters": [
+                    {
+                        "name": "naziv",
+                        "in": "query",
+                        "description": "Deo naziva predstave za pretragu",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešna pretraga"
+                    },
+                    "400": {
+                        "description": "Loš zahtev (fali parametar)"
+                    }
+                }
+            }
+        },
+        "/api/predstave/{id}/izvodjenja": {
+            "get": {
+                "tags": [
+                    "Predstave"
+                ],
+                "summary": "Prikaz svih izvođenja za određenu predstavu",
+                "operationId": "7c2a31d9511f3fc632866ce97061b7a1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID predstave",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešno učitana izvođenja"
+                    },
+                    "404": {
+                        "description": "Predstava nije pronađena"
+                    }
+                }
+            }
+        },
+        "/api/rezervacije": {
+            "get": {
+                "tags": [
+                    "Rezervacije"
+                ],
+                "summary": "Prikaz svih rezervacija (Admin)",
+                "operationId": "7b2f404cb4ea08f8a74d464c06c0dffc",
+                "responses": {
+                    "200": {
+                        "description": "Uspešno učitane sve rezervacije"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Rezervacije"
+                ],
+                "summary": "Kreiranje nove rezervacije sa više karata",
+                "description": "Korisnik šalje niz ID-eva karata. Sistem proverava dostupnost, računa ukupnu cenu i kreira stavke.",
+                "operationId": "836647735ff8ff8bb356eba0efd815c2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "korisnik_id",
+                                    "nacin_placanja",
+                                    "karte"
+                                ],
+                                "properties": {
+                                    "korisnik_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "nacin_placanja": {
+                                        "type": "string",
+                                        "enum": [
+                                            "kartica",
+                                            "na_blagajni",
+                                            "vaucer"
+                                        ]
+                                    },
+                                    "karte": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            10,
+                                            11,
+                                            12
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Rezervacija uspešno kreirana"
+                    },
+                    "400": {
+                        "description": "Neka od karata je već prodata"
+                    },
+                    "422": {
+                        "description": "Greška u validaciji"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/rezervacije/{id}": {
+            "get": {
+                "tags": [
+                    "Rezervacije"
+                ],
+                "summary": "Prikaz detalja određene rezervacije",
+                "operationId": "106ca35562e99c4f2bfe1d87e6e9a696",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/rezervacije/{id}/status": {
+            "put": {
+                "tags": [
+                    "Rezervacije"
+                ],
+                "summary": "Promena statusa rezervacije (Admin)",
+                "operationId": "d043e25b3fa3727e414e57c74b37c58c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "potvrdjena"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status uspešno promenjen"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/moje-rezervacije": {
+            "get": {
+                "tags": [
+                    "Rezervacije"
+                ],
+                "summary": "Prikaz rezervacija ulogovanog korisnika",
+                "operationId": "fe56e08ceaa0f374046c4a9f825ebebf",
+                "responses": {
+                    "200": {
+                        "description": "Lista vaših rezervacija"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/rezervacije/{id}/potvrdi": {
+            "put": {
+                "tags": [
+                    "Rezervacije"
+                ],
+                "summary": "Brza potvrda rezervacije od strane admina",
+                "description": "Postavlja status rezervacije direktno na 'potvrdjena'.",
+                "operationId": "3698351b10d5b7312c9f4fdb4252344c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rezervacija uspešno potvrđena"
+                    },
+                    "404": {
+                        "description": "Rezervacija nije pronađena"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/sale": {
+            "get": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "Prikaz svih sala",
+                "description": "Display a listing of the resource.",
+                "operationId": "6d4b645af564be050ee632110762ec82",
+                "responses": {
+                    "200": {
+                        "description": "Uspešno učitane sale"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "Dodavanje nove sale",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "7bfbfd762f0b9cc4165ecd123857e0ca",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "naziv",
+                                    "kapacitet"
+                                ],
+                                "properties": {
+                                    "naziv": {
+                                        "type": "string",
+                                        "example": "Velika scena"
+                                    },
+                                    "kapacitet": {
+                                        "type": "integer",
+                                        "example": 350
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Uspešno kreirano"
+                    },
+                    "422": {
+                        "description": "Greška u validaciji"
+                    }
+                }
+            }
+        },
+        "/api/sale/{id}": {
+            "get": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "Prikaz jedne sale",
+                "description": "Display the specified resource.",
+                "operationId": "35fe23d1ad40587f8fc1d3450da074f2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Uspešno"
+                    },
+                    "404": {
+                        "description": "Sala nije pronađena"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "Ažuriranje sale",
+                "description": "Update the specified resource in storage.",
+                "operationId": "931d0232052188c0491eca29e6c765d1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "naziv": {
+                                        "type": "string",
+                                        "example": "Mala scena - renovirana"
+                                    },
+                                    "kapacitet": {
+                                        "type": "integer",
+                                        "example": 120
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Uspešno ažurirano"
+                    },
+                    "404": {
+                        "description": "Sala nije pronađena"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Sale"
+                ],
+                "summary": "Brisanje sale",
+                "description": "Remove the specified resource from storage.",
+                "operationId": "567c3e7bed0d1d0f118d231a4bb677d7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obrisano"
+                    },
+                    "404": {
+                        "description": "Sala nije pronađena"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "description": "Unesite vaš API token koji ste dobili pri prijavi (login) ili registraciji.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autentifikacija",
+            "description": "Autentifikacija"
+        },
+        {
+            "name": "Izvođenja",
+            "description": "Izvođenja"
+        },
+        {
+            "name": "Karte",
+            "description": "Karte"
+        },
+        {
+            "name": "Predstave",
+            "description": "Predstave"
+        },
+        {
+            "name": "Rezervacije",
+            "description": "Rezervacije"
+        },
+        {
+            "name": "Sale",
+            "description": "Sale"
+        }
+    ]
+}
