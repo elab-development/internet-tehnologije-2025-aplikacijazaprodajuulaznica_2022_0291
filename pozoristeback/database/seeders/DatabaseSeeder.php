@@ -12,6 +12,22 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('sale')->insert([
+            [
+                'id' => 1,
+                'naziv' => 'Velika sala',
+                'kapacitet' => 200,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 2,
+                'naziv' => 'Mala sala',
+                'kapacitet' => 50,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        ]);
 
         // 1. KORISNICI - sa verifikacijom
         Korisnik::create([
