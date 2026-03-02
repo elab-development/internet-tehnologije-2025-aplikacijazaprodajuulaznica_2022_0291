@@ -18,7 +18,8 @@ class Korisnik extends Authenticatable implements MustVerifyEmail
         'email',
         'korisnicko_ime', 
         'lozinka',  
-        'uloga' // admin ili klijent
+        'uloga', // admin ili klijent
+        'email_verified_at', // DODATO!
     ];
 
     protected $hidden = [
@@ -36,6 +37,7 @@ class Korisnik extends Authenticatable implements MustVerifyEmail
     {
         return [
             'lozinka' => 'hashed',
+            'email_verified_at' => 'datetime', // DODATO!
         ];
     }
 
@@ -54,4 +56,3 @@ class Korisnik extends Authenticatable implements MustVerifyEmail
         return $this->uloga === 'klijent';
     }
 }
-
