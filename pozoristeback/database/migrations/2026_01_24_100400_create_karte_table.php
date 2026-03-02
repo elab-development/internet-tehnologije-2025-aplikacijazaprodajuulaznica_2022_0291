@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('izvodjenje_id')
                 ->constrained('izvodjenja')
                 ->cascadeOnDelete();
-            $table->string('sedista');
+            $table->string('broj_sedista');
             $table->decimal('cena',8,2);
             $table->boolean('prodata');
             $table->timestamps();
