@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('rezervacije', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
+            $table->foreignId('korisnik_id')
                 ->constrained('korisnici')
                 ->cascadeOnDelete();
             $table->decimal('ukupna_cena',8,2);
