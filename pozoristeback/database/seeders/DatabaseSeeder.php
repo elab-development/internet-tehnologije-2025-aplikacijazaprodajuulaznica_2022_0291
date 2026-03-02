@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder
         // 4. KARTE
         DB::table('karte')->insert([
             'izvodjenje_id' => 1,
-            'broj_sedista' => 'A100',
+            'sedista' => 'A100',
             'cena' => 1000.00,
             'prodata' => 1,
             'created_at' => now(),
