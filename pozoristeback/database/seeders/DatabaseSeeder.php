@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         // 2. PREDSTAVE
         Predstava::create([
             'naziv' => 'Hasanaginica',
-            'detalji_predstave' => 'Tragedija zasnovana na narodnoj baladi',
+            'opis' => 'Tragedija zasnovana na narodnoj baladi',
             'reditelj' => 'Jagoš Marković',
             'trajanje_min' => 120,
             'img_url' => '/slike/hasanaginica.jpg'
