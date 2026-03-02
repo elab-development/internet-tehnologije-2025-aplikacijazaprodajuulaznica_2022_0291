@@ -57,6 +57,13 @@ jobs:
         echo "MySQL je spreman!"
 
     - name: Run migrations
+      env:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3307
+        DB_DATABASE: prodaja_ulaznica
+        DB_USERNAME: root
+        DB_PASSWORD: root
       run: |
         cd pozoristeback
         php artisan migrate --force
