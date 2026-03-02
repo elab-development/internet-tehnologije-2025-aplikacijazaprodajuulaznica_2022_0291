@@ -46,7 +46,7 @@ jobs:
         APP_KEY: base64:uPUnebC5Dl5YZufrVkzGZqi+SEZJ9ygnx2WQthAbFJg=
       run: |
         cd pozoristeback
-        php artisan migrate --force
+        php artisan migrate:fresh --seed
         php artisan test
 
   build-docker-image:
