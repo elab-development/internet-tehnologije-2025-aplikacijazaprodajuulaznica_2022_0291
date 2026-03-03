@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN a2enmod rewrite
 
-# 2. Kopiranje Apache konfiguracije (ona je u istom folderu kao i Dockerfile)
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+# 2. Kopiranje Apache konfiguracije (Sada sa punom putanjom iz korena)
+COPY docker/laravel/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # 3. Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
