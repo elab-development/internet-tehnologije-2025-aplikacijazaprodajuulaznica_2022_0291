@@ -10,32 +10,31 @@ RUN apt-get update && apt-get install -y \
 
 RUN a2enmod rewrite
 
-# 2. Kopiranje Apache konfiguracije (Sada sa punom putanjom iz korena)
-COPY docker/laravel/000-default.conf /etc/apache2/sites-available/000-default.conf
-
-# 3. Composer
+# 2. Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# 4. KLJUČNI DEO: Kopiramo SVE iz context-a u kontejner
+# 3. Kopiramo sve
 COPY . .
 
-# 5. Pošto je tvoj Laravel u pozoristeback, pomeramo se tamo
+# 4. Radni direktorijum je Laravel
 WORKDIR /var/www/pozoristeback
 
-# 6. Dozvole
+# 5. Dozvole
 RUN mkdir -p storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# 7. Instalacija (Laravel je sada tu)
+# 6. Instalacija
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# 8. Apache mora da gleda u podfolder public unutar pozoristeback
-ENV APACHE_DOCUMENT_ROOT /var/www/pozoristeback/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# 7. APACHE FIX: Kopiramo konf fajl TEK SADA da ga niko ne pregazi
+# Putanja mora biti tacna u odnosu na koren projekta!
+COPY docker/laravel/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+# 8. Forsiramo Apache da koristi tvoj fajl i restartujemo konfiguraciju
+RUN a2dissite 000-default.conf && a2ensite 000-default.conf
 
 EXPOSE 80
 CMD ["apache2-foreground"]
