@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# 1. Instalacija sistemskih zavisnosti
+# 1. Sistemske zavisnosti
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev libpng-dev libonig-dev libxml2-dev libicu-dev \
     mariadb-client \
@@ -8,31 +8,34 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_mysql zip mbstring exif pcntl bcmath intl \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Omogućavanje Apache mod_rewrite (ključno za rute)
 RUN a2enmod rewrite
 
-# 3. Podešavanje DocumentRoot-a na /var/www/public
-ENV APACHE_DOCUMENT_ROOT /var/www/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# 2. Kopiranje Apache konfiguracije (ona je u istom folderu kao i Dockerfile)
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# 4. Instalacija Composera
+# 3. Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-# 5. Kopiranje fajlova
+# 4. KLJUČNI DEO: Kopiramo SVE iz context-a u kontejner
 COPY . .
 
-# 6. Kreiranje foldera i dozvole (da ne pukne chown)
-RUN mkdir -p /var/www/storage /var/www/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
-    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+# 5. Pošto je tvoj Laravel u pozoristeback, pomeramo se tamo
+WORKDIR /var/www/pozoristeback
 
-# 7. Instalacija zavisnosti (bez dev alata, optimizovano)
+# 6. Dozvole
+RUN mkdir -p storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+# 7. Instalacija (Laravel je sada tu)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-EXPOSE 80
+# 8. Apache mora da gleda u podfolder public unutar pozoristeback
+ENV APACHE_DOCUMENT_ROOT /var/www/pozoristeback/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# 8. Startna komanda koja osigurava da je Apache glavni proces
+EXPOSE 80
 CMD ["apache2-foreground"]
