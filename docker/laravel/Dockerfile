@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_mysql zip mbstring exif pcntl bcmath intl \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt install php-pgsql 
+
 RUN a2enmod rewrite
 
 # 2. Composer
