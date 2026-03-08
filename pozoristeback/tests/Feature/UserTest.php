@@ -11,7 +11,6 @@ class UserTest extends TestCase
 
     public function test_klijent_ne_moze_da_vidi_listu_svih_korisnika()
     {
-        // 1. Kreiramo klijenta
         $user = Korisnik::create([
             'korisnicko_ime' => 'test_klijent_' . uniqid(),
             'email' => 'test_' . uniqid() . '@example.com',
@@ -20,7 +19,6 @@ class UserTest extends TestCase
             'email_verified_at' => now(),
         ]);
 
-        // 2. Logujemo se
         $loginResponse = $this->postJson('/api/login', [
             'korisnicko_ime' => $user->korisnicko_ime,
             'lozinka' => 'password123',
@@ -30,7 +28,6 @@ class UserTest extends TestCase
         
         $token = $loginResponse->json('access_token');
 
-        // 3. Pokušavamo da vidimo listu korisnika
         $response = $this->withToken($token)->getJson("/api/korisnici");
 
         $response->assertStatus(404);
