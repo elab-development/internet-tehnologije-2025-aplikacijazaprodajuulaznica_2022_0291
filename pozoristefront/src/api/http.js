@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // const BASE_URL = 'http://127.0.0.1:8000/api'; 
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:8000/api' 
+    : 'https://internet-tehnologije-2025-3h3i.onrender.com/api';
 
 const http = axios.create({
     baseURL: BASE_URL,
