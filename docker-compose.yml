@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Baza podataka
   db:
-    image: postgres
+    image: mysql:8.0
     container_name: pozoriste_db
     restart: always
     environment:
