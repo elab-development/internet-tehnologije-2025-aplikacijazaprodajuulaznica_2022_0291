@@ -3,10 +3,8 @@
 return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => [
-        'http://localhost:3000',
-        'https://pozoriste-front.onrender.com'
-    ],    'allowed_origins_patterns' => [],
+    'allowed_origins' => array_filter(explode(',', env('FRONTEND_URLS', 'http://localhost:3000'))),
+    'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
     'max_age' => 0,
