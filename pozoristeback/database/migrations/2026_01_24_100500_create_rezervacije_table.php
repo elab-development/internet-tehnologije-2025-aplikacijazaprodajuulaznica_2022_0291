@@ -18,16 +18,16 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->decimal('ukupna_cena',8,2);
             $table->enum('nacin_placanja', [
-                'KARTICA',
-                'NA_BLAGAJNI',
-                'VAUCER'
+                'kartica',
+                'na_blagajni',
+                'vaucer'
             ])->default('KARTICA');
             $table->enum('status', [
-                'KREIRANA',
-                'POTVRDJENA',
-                'OTKAZANA',
-                'ISTEKLA'
-            ])->default('KREIRANA');
+                'kreirana',
+                'potvrdjena',
+                'otkazana',
+                'istekla'
+            ])->default('kreirana');
             $table->date('datum_kreiranja');
             $table->timestamps();
         });
