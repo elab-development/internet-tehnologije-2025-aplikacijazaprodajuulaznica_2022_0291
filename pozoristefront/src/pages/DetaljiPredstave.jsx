@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import http from '../api/http';
 import '../css/DetaljiPredstave.css';
 
 const DetaljiPredstave = () => {
@@ -10,8 +10,7 @@ const DetaljiPredstave = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Axios poziv ka tvom Laravel backendu
-        axios.get(`http://localhost:8000/api/predstave/${id}`)
+        http.get(`/predstave/${id}`) 
             .then(res => {
                 setPredstava(res.data);
                 setLoading(false);
