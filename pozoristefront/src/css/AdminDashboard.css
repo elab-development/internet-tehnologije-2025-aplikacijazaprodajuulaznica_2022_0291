@@ -85,3 +85,11 @@
     border-radius: 20px;
     font-size: 0.9rem;
 }
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+    margin-bottom: 40px;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // <--- DODATO: Uvozimo useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import http from '../api/http';
 import '../css/LogIn.css'; 
 
