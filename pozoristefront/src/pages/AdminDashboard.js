@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/AdminDashboard.css'; 
+import StatsChart from '../components/StatsChart';
 
 const getMe = () => {
     try {
@@ -44,6 +45,7 @@ export default function AdminDashboard() {
                     <Link to="/admin/rezervacije" className="btn-admin">Pogledaj</Link>
                 </div>
             </div>
+            <StatsChart />
         </div>
     );
 }

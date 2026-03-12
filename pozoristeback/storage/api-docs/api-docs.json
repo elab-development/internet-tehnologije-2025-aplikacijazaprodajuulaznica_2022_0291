@@ -830,6 +830,28 @@
                 }
             }
         },
+                "/api/stats/popularne-predstave": {
+            "get": {
+                "tags": [
+                    "Statistika"
+                ],
+                "summary": "Statistika top 5 najprodavanijih predstava",
+                "operationId": "3255bde800089c4453cafb5b2714a4cb",
+                "responses": {
+                    "200": {
+                        "description": "Uspešno učitana statistika"
+                    },
+                    "403": {
+                        "description": "Zabranjen pristup (samo admin)"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/rezervacije": {
             "get": {
                 "tags": [
@@ -1220,6 +1242,10 @@
         {
             "name": "Predstave",
             "description": "Predstave"
+        },
+        {
+            "name": "Statistika",
+            "description": "Statistika"
         },
         {
             "name": "Rezervacije",

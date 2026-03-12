@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Predstava;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 use OpenApi\Attributes as OA;
 
@@ -229,4 +230,31 @@ class PredstavaController extends Controller
         // Vraća sva izvođenja koja pripadaju toj predstavi
         return response()->json($predstava->izvodjenja);
     }
+
+        #[OA\Get(
+        path: "/api/stats/popularne-predstave",
+        summary: "Statistika top 5 najprodavanijih predstava",
+        tags: ["Statistika"],
+        security: [["sanctum" => []]]
+    )]
+    #[OA\Response(response: 200, description: "Uspešno učitana statistika")]
+    #[OA\Response(response: 403, description: "Zabranjen pristup (samo admin)")]
+
+    public function statistikaPopularnosti()
+    {
+        // Uzimamo predstave i brojimo prodate karte kroz relacije
+        $stats = Predstava::select('predstave.naziv', DB::raw('count(karte.id) as broj_prodatih_karata'))
+            ->join('izvodjenja', 'predstave.id', '=', 'izvodjenja.predstava_id')
+            ->join('karte', 'izvodjenja.id', '=', 'karte.izvodjenje_id')
+            ->where('karte.prodata', true) // brojimo samo one koje su prodate
+            ->groupBy('predstave.id', 'predstave.naziv')
+            ->orderBy('broj_prodatih_karata', 'desc')
+            ->take(5) // Top 5 najpopularnijih
+            ->get();
+
+        return response()->json($stats);
+    }
 }
+
+
+

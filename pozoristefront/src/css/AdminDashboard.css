@@ -85,3 +85,20 @@
     border-radius: 20px;
     font-size: 0.9rem;
 }
+
+.stats-chart-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.stats-chart-container {
+    width: 100%;
+    max-width: 1100px;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+    border: 1px solid #642222;
+}

@@ -76,5 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Admin uvid u sve transakcije
         Route::get('/rezervacije', [RezervacijaController::class, 'index']);
         Route::get('/karte', [KartaController::class, 'index']);
+
+        Route::get('/stats/popularne-predstave', [PredstavaController::class, 'statistikaPopularnosti']);
     });
 });
